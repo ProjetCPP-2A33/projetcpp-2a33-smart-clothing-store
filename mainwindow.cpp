@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "equipment.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -32,24 +33,18 @@ void MainWindow::handleSubmitBtnClick() {
     int quantity = ui->quantityInput->text().toInt();
     QString utility = ui->utilityInput->text();
 
-    QSqlQuery query(connection->getDatabase());
-    query.prepare("INSERT INTO equipments (id, name, type, quantity, utility) VALUES (?, ?, ?, ?, ?)");
-    query.addBindValue(id);
-    query.addBindValue(name);
-    query.addBindValue(type);
-    query.addBindValue(quantity);
-    query.addBindValue(utility);
+    Equipment equipment(id, name, type, quantity, utility);
 
-    if (!query.exec()) {
-        qDebug() << "Insert Error:" << query.lastError().text(); // Log error message
-    } else {
-        qDebug() << "Data inserted successfully! ID:" << id << ", Name:" << name << ", Type:" << type << ", Quantity:" << quantity << ", Utility:" << utility;
+    if (equipment.ajouter(connection->getDatabase())) {
+        ui->statusBar->showMessage("Data saved to the database.", 5000);
         ui->IDInput->clear();
         ui->nameInput->clear();
         ui->typeInput->clear();
         ui->quantityInput->clear();
         ui->utilityInput->clear();
-        ui->statusBar->showMessage("Data saved to the database.", 6000);
+    } else {
+        ui->statusBar->setStyleSheet("color: red;");
+        ui->statusBar->showMessage("Failed to add equipment.");
     }
 }
 
@@ -62,23 +57,14 @@ void MainWindow::handleDeleteBtnClick() {
         return;
     }
 
-    QSqlQuery query(connection->getDatabase());
-    query.prepare("DELETE FROM equipments WHERE id = ?");
-    query.addBindValue(equipmentId);
-
-    if (query.exec()) {
-        if (query.numRowsAffected() > 0) {
-            ui->statusBar->setStyleSheet("color: green;");
-            ui->statusBar->showMessage("Equipment deleted successfully.", 6000);
-            ui->deleteInput->clear();
-        } else {
-            ui->statusBar->setStyleSheet("color: red;");
-            ui->statusBar->showMessage("No equipment found with the provided ID.", 6000);
-        }
+    Equipment equipment("", "", "", 0, "");
+    if (equipment.supprimer(connection->getDatabase(), equipmentId)) {
+        ui->statusBar->showMessage("Equipment deleted successfully.", 5000);
+        ui->statusBar->setStyleSheet("color: green;");
+        ui->deleteInput->clear();
     } else {
-        qDebug() << "Delete Error:" << query.lastError().text();
         ui->statusBar->setStyleSheet("color: red;");
-        ui->statusBar->showMessage("Error deleting equipment from the database.", 6000);
+        ui->statusBar->showMessage("Equipment with this ID was not found.");
     }
 }
 
