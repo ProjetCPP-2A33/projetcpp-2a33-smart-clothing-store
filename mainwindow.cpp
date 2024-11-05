@@ -1,66 +1,148 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "clientswindow.h" // Inclure la nouvelle fenêtre
+#include <QMessageBox>
+#include "employe.h"
+#include <QSqlQuery>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::MainWindow) {
+    , ui(new Ui::MainWindow)
+{
     ui->setupUi(this);
 
-    // Créer les boutons
-    buttonArticle = new QPushButton("Article", this);
-    buttonClients = new QPushButton("Clients", this);
-    buttonCommandes = new QPushButton("Commandes", this);
-    buttonEmployes = new QPushButton("Employés", this);
-    buttonFournisseurs = new QPushButton("Fournisseurs", this);
-    buttonEquipements = new QPushButton("Équipements", this);
-    buttonQuitter = new QPushButton("Quitter", this);
-
-    // Définir la taille des boutons
-    int buttonWidth = 291;
-    int buttonHeight = 41;
-
-    // Positionner les boutons
-    buttonArticle->setGeometry(870, 180, buttonWidth, buttonHeight);
-    buttonClients->setGeometry(870, 240, buttonWidth, buttonHeight);
-    buttonCommandes->setGeometry(870, 300, buttonWidth, buttonHeight);
-    buttonEmployes->setGeometry(870, 360, buttonWidth, buttonHeight);
-    buttonFournisseurs->setGeometry(870, 420, buttonWidth, buttonHeight);
-    buttonEquipements->setGeometry(870, 480, buttonWidth, buttonHeight);
-    buttonQuitter->setGeometry(870, 600, buttonWidth, buttonHeight);
-
-    // Appliquer une feuille de style pour chaque bouton
-    QString buttonStyle = "QPushButton {"
-                          "background-color: rgb(0,241, 177, 100);"    // Couleur de fond initiale
-                          "color: black;"                // Couleur du texte par défaut
-                          "border: 2px solid lightgreen;"      // Bordure
-                          "border-radius: 10px;"         // Coins arrondis
-                          "font-family: 'Segoe UI Black';" // Police
-                          "font-size: 17px;"             // Taille de la police
-                          "}"
-                          "QPushButton:hover {"
-                          "background-color: lightgreen;" // Couleur au survol
-                          "}"
-                          "QPushButton:pressed {"
-                          "background-color:white ;" // Couleur lorsqu'il est pressé
-                          "}";
-
-    buttonArticle->setStyleSheet(buttonStyle);
-    buttonClients->setStyleSheet(buttonStyle);
-    buttonCommandes->setStyleSheet(buttonStyle);
-    buttonEmployes->setStyleSheet(buttonStyle);
-    buttonFournisseurs->setStyleSheet(buttonStyle);
-    buttonEquipements->setStyleSheet(buttonStyle);
-    buttonQuitter->setStyleSheet(buttonStyle);
-
-    // Connecter le bouton Quitter à l'action de fermeture de l'application
-    connect(buttonQuitter, &QPushButton::clicked, this, &QMainWindow::close);
-      connect(buttonClients, &QPushButton::clicked, this, &MainWindow::openClientsWindow);
+    employe p;
+    ui->emptable->setModel(p.afficherEmploye());
 }
-void MainWindow::openClientsWindow() {
-    ClientsWindow *clientsWindow = new ClientsWindow(this);
-    clientsWindow->show(); // Affiche la fenêtre Clients
-}
-MainWindow::~MainWindow() {
+
+MainWindow::~MainWindow()
+{
     delete ui;
+}
+
+void MainWindow::on_bouttonajouter_clicked()
+{
+    employe p;
+
+    QString nom = ui->ajouternom->text();
+    QString prenom = ui->ajouterprenom->text();
+    QString mail = ui->ajoutermail->text();
+    QString mot_de_passe = ui->ajoutermotdepasse->text();
+    int num_tel = ui->ajouternumtel->text().toInt();
+    QString adresse = ui->ajouteradresse->text();
+    p.setNom(nom);
+    p.setPrenom(prenom);
+    p.setMail(mail);
+    p.setMotDePasse(mot_de_passe);
+    p.setNumTel(num_tel);
+    p.setAdresse(adresse);
+
+    if (p.ajouterEmploye(p)) {
+        QMessageBox::information(this, "Succès", "Employe ajouté avec succès!");
+        ui->ajouternom->clear();
+        ui->ajouterprenom->clear();
+        ui->ajoutermail->clear();
+        ui->ajoutermotdepasse->clear();
+        ui->ajouternumtel->clear();
+        ui->ajouteradresse->clear();
+
+        ui->emptable->setModel(p.afficherEmploye());
+
+        qDebug() << "Employe ajouté avec succès!";
+    } else {
+        QMessageBox::critical(this, "Erreur", "Échec de l'ajout de l'employe.");
+        qDebug() << "Échec de l'ajout dans la base";
+    }
+}
+
+void MainWindow::on_pushButton_clicked()
+{
+    employe p;
+    QString nom = ui->ajouternom_2->text();
+    QString prenom = ui->ajouterprenom_2->text();
+    QString mail = ui->ajoutermail_2->text();
+    QString mot_de_passe = ui->ajoutermotdepasse_2->text();
+    int num_tel = ui->ajouternumerodetelephone_2->text().toInt();
+    QString adresse = ui->ajouteradresse_2->text();
+
+    if (p.modifierEmploye(nom, prenom, mail, mot_de_passe, num_tel, adresse)) {
+        qDebug() << "Employe modifié avec succès!";
+        QMessageBox::information(this, "Succès", "Employe modifié avec succès!");
+
+        ui->ajouternom_2->clear();
+        ui->ajouterprenom_2->clear();
+        ui->ajoutermail_2->clear();
+        ui->ajouternumerodetelephone_2->clear();
+        ui->ajoutermotdepasse_2->clear();
+        ui->ajouteradresse_2->clear();
+
+        ui->emptable->setModel(p.afficherEmploye());
+    } else {
+        QMessageBox::critical(this, "Erreur", "Échec de la modification.");
+    }
+}
+
+void MainWindow::on_button_supprimer_clicked()
+{
+    employe p;
+    int id_emp = ui->idsupprimer->text().toInt();
+
+    QSqlQuery checkQuery;
+    checkQuery.prepare("SELECT COUNT(*) FROM employe WHERE id_emp = :id_emp");
+    checkQuery.bindValue(":id_emp", id_emp);
+
+    if (!checkQuery.exec() || !checkQuery.next() || checkQuery.value(0).toInt() == 0) {
+        QMessageBox::warning(this, "Employe introuvable", "Aucun employe trouvé avec cet ID.");
+        return;
+    }
+
+    if (p.supprimerEmploye(id_emp)) {
+        qDebug() << "Employe supprimé avec succès!";
+        QMessageBox::information(this, "Succès", "Employe supprimé avec succès!");
+
+        ui->idsupprimer->clear();
+        ui->emptable->setModel(p.afficherEmploye());
+    } else {
+        QMessageBox::critical(this, "Erreur", "Échec de la suppression");
+    }
+}
+
+void MainWindow::on_pushButton_2_clicked()
+{
+    int id_emp = ui->idemployemodif->text().toInt();
+
+    if (id_emp <= 0) {
+        QMessageBox::warning(this, "Erreur", "Veuillez entrer un ID produit valide.");
+        return;
+    }
+    QSqlQuery query;
+    query.prepare("SELECT nom, prenom, mail, mot_de_passe, num_tel, adresse FROM employe WHERE id_emp = :id_emp");
+    query.bindValue(":id_emp", id_emp);
+
+    qDebug() << "id employe:" << id_emp;
+
+    if (!query.exec()) {
+        QMessageBox::critical(this, "Erreur", "Erreur lors de l'exécution de la requête.");
+        return;
+    }
+
+    if (query.next()) {
+        QString nom = query.value("nom").toString();
+        QString prenom = query.value("prenom").toString();
+        QString mail = query.value("mail").toString();
+        QString mot_de_passe = query.value("mot_de_passe").toString();
+        int num_tel = query.value("num_tel").toInt();
+        QString adresse = query.value("adresse").toString();
+
+        qDebug() << "Nom:" << nom << "Prenom:" << prenom << "Mail:" << mail;
+
+        ui->ajouternom_2->setText(nom);
+        ui->ajouterprenom_2->setText(prenom);
+        ui->ajoutermail_2->setText(mail);
+        ui->ajoutermotdepasse_2->setText(mot_de_passe);
+        ui->ajouternumerodetelephone_2->setText(QString::number(num_tel));
+        ui->ajouteradresse_2->setText(adresse);
+    } else {
+        QMessageBox::warning(this, "Employe introuvable", "Aucun Employe trouvé avec cet ID.");
+    }
+
 }
