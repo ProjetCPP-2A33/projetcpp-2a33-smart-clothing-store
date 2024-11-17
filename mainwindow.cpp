@@ -13,7 +13,9 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->updatePageBtn, &QPushButton::clicked, this, &MainWindow::goToUpdatePage);
     connect(ui->deletePageBtn, &QPushButton::clicked, this, &MainWindow::goToDeletePage);
     connect(ui->addPageBtn, &QPushButton::clicked, this, &MainWindow::goToAddPage);
+    connect(ui->searchPageBtn, &QPushButton::clicked, this, &MainWindow::goToSearchPage);
     connect(ui->deleteBtn, &QPushButton::clicked, this, &MainWindow::handleDeleteBtnClick);
+    connect(ui->searchBtn, &QPushButton::clicked, this, &MainWindow::handleSearchBtnClick);
 
 }
 
@@ -68,12 +70,43 @@ void MainWindow::handleDeleteBtnClick() {
     }
 }
 
+void MainWindow::goToRetrievePage() {
+    int pageIndex = ui->stackedWidget->indexOf(ui->retrievePage);
+    ui->stackedWidget->setCurrentIndex(pageIndex);
+
+    // Populate the table with data
+    populateEquipmentsTable();
+}
+
+void MainWindow::goToUpdatePage() {
+    int pageIndex = ui->stackedWidget->indexOf(ui->updatePage);
+    ui->stackedWidget->setCurrentIndex(pageIndex);
+}
+
+void MainWindow::goToAddPage() {
+    int pageIndex = ui->stackedWidget->indexOf(ui->addPage);
+    ui->stackedWidget->setCurrentIndex(pageIndex);
+}
+
+void MainWindow::goToDeletePage() {
+    int pageIndex = ui->stackedWidget->indexOf(ui->deletePage);
+    ui->stackedWidget->setCurrentIndex(pageIndex);
+}
+
+void MainWindow::goToSearchPage() {
+    int pageIndex = ui->stackedWidget->indexOf(ui->searchPage);
+    ui->stackedWidget->setCurrentIndex(pageIndex);
+
+    ui->searchTable->setColumnCount(5);
+    ui->searchTable->setHorizontalHeaderLabels({"ID", "Name", "Type", "Quantity", "Utility"});
+}
+
 void MainWindow::populateEquipmentsTable() {
     // Clear the table before populating
     ui->equipmentsTable->setRowCount(0);
 
     // Retrieve all equipment data
-    QList<Equipment> equipmentList = Equipment::retrieveAll(connection->getDatabase());
+    QList<Equipment> equipmentList = Equipment::afficher(connection->getDatabase());
 
     // Set column headers
     ui->equipmentsTable->setColumnCount(5);
@@ -101,25 +134,42 @@ void MainWindow::populateEquipmentsTable() {
     }
 }
 
-void MainWindow::goToRetrievePage() {
-    int pageIndex = ui->stackedWidget->indexOf(ui->retrievePage);
-    ui->stackedWidget->setCurrentIndex(pageIndex);
+void MainWindow::handleSearchBtnClick() {
+    // Get the equipment ID from the input field
+    QString equipmentId = ui->searchInput->text();
 
-    // Populate the table with data
-    populateEquipmentsTable();
-}
+    // Check if the input is empty
+    if (equipmentId.isEmpty()) {
+        ui->statusBar->setStyleSheet("color: red;");
+        ui->statusBar->showMessage("Please enter an Equipment ID to search.", 5000);
+        return;
+    }
 
-void MainWindow::goToUpdatePage() {
-    int pageIndex = ui->stackedWidget->indexOf(ui->updatePage);
-    ui->stackedWidget->setCurrentIndex(pageIndex);
-}
+    // Call the findById function to search the equipment by ID
+    Equipment equipment = Equipment::rechercher(connection->getDatabase(), equipmentId);
 
-void MainWindow::goToAddPage() {
-    int pageIndex = ui->stackedWidget->indexOf(ui->addPage);
-    ui->stackedWidget->setCurrentIndex(pageIndex);
-}
+    // If the equipment is found
+    if (!equipment.getId().isEmpty()) {
+        // Clear previous rows (if any) in the table
+        ui->searchTable->setRowCount(0);  // Reset the table
 
-void MainWindow::goToDeletePage() {
-    int pageIndex = ui->stackedWidget->indexOf(ui->deletePage);
-    ui->stackedWidget->setCurrentIndex(pageIndex);
+        // Add the found equipment details to the table (in a single row)
+        ui->searchTable->setRowCount(1);  // Only one row for the result
+
+        // Populate the table with the found equipment details
+        ui->searchTable->setItem(0, 0, new QTableWidgetItem(equipment.getId()));
+        ui->searchTable->setItem(0, 1, new QTableWidgetItem(equipment.getName()));
+        ui->searchTable->setItem(0, 2, new QTableWidgetItem(equipment.getType()));
+        ui->searchTable->setItem(0, 3, new QTableWidgetItem(QString::number(equipment.getQuantity())));
+        ui->searchTable->setItem(0, 4, new QTableWidgetItem(equipment.getUtility()));
+
+        // Show a success message in the status bar
+        ui->statusBar->setStyleSheet("color: green;");
+        ui->statusBar->showMessage("Equipment found and displayed.", 5000);
+    } else {
+        // If equipment is not found, show a failure message in the status bar
+        ui->searchTable->setRowCount(0);
+        ui->statusBar->setStyleSheet("color: red;");
+        ui->statusBar->showMessage("No equipment found with the given ID.", 5000);
+    }
 }

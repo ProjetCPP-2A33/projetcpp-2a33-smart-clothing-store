@@ -23,7 +23,9 @@ public:
 
     bool supprimer(const QSqlDatabase &db, const QString &id);
 
-    static QList<Equipment> retrieveAll(const QSqlDatabase &db);
+    static QList<Equipment> afficher(const QSqlDatabase &db);
+
+    static Equipment rechercher(const QSqlDatabase &db, const QString &id);
 
     QString getId() const { return id; }
     QString getName() const { return name; }

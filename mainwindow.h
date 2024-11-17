@@ -23,10 +23,12 @@ public:
 private slots:
     void handleSubmitBtnClick();
     void handleDeleteBtnClick();
+    void handleSearchBtnClick();
     void goToAddPage();
     void goToRetrievePage();
     void goToUpdatePage();
     void goToDeletePage();
+    void goToSearchPage();
 
 private:
     Ui::MainWindow *ui;

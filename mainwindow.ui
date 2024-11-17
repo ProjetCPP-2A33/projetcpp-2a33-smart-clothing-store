@@ -64,10 +64,17 @@
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout">
-     <item row="0" column="0">
-      <widget class="QPushButton" name="addPageBtn">
+     <item row="0" column="8">
+      <widget class="QPushButton" name="pushButton_8">
        <property name="text">
-        <string>ADD</string>
+        <string>EXPORT AS PDF</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2">
+      <widget class="QPushButton" name="updatePageBtn">
+       <property name="text">
+        <string>UPDATE</string>
        </property>
       </widget>
      </item>
@@ -78,10 +85,24 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="2">
-      <widget class="QPushButton" name="updatePageBtn">
+     <item row="0" column="7">
+      <widget class="QPushButton" name="pushButton_6">
        <property name="text">
-        <string>UPDATE</string>
+        <string>COLLECT BY TYPE</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QPushButton" name="addPageBtn">
+       <property name="text">
+        <string>ADD</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="6">
+      <widget class="QPushButton" name="pushButton_7">
+       <property name="text">
+        <string>SORT BY QUANTITY</string>
        </property>
       </widget>
      </item>
@@ -93,30 +114,16 @@
       </widget>
      </item>
      <item row="0" column="4">
-      <widget class="QPushButton" name="pushButton_4">
+      <widget class="QPushButton" name="searchPageBtn">
        <property name="text">
-        <string>FIND BY ID</string>
+        <string>SEARCH BY ID</string>
        </property>
       </widget>
      </item>
      <item row="0" column="5">
-      <widget class="QPushButton" name="pushButton_7">
+      <widget class="QPushButton" name="pushButton">
        <property name="text">
-        <string>SORT BY QUANTITY</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="6">
-      <widget class="QPushButton" name="pushButton_6">
-       <property name="text">
-        <string>COLLECT BY TYPE</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="7">
-      <widget class="QPushButton" name="pushButton_8">
-       <property name="text">
-        <string>EXPORT AS PDF</string>
+        <string>SEARCH BY NAME</string>
        </property>
       </widget>
      </item>
@@ -284,6 +291,75 @@
       </property>
      </widget>
     </widget>
+    <widget class="QWidget" name="searchPage">
+     <widget class="QLabel" name="searchLabel">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>251</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Poppins</family>
+        <pointsize>15</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>SEARCH EQUIPMENT BY ID:</string>
+      </property>
+     </widget>
+     <widget class="QTableWidget" name="searchTable">
+      <property name="geometry">
+       <rect>
+        <x>15</x>
+        <y>40</y>
+        <width>951</width>
+        <height>361</height>
+       </rect>
+      </property>
+      <attribute name="horizontalHeaderStretchLastSection">
+       <bool>true</bool>
+      </attribute>
+      <attribute name="verticalHeaderDefaultSectionSize">
+       <number>25</number>
+      </attribute>
+      <attribute name="verticalHeaderStretchLastSection">
+       <bool>false</bool>
+      </attribute>
+     </widget>
+     <widget class="QLineEdit" name="searchInput">
+      <property name="geometry">
+       <rect>
+        <x>260</x>
+        <y>0</y>
+        <width>221</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="placeholderText">
+       <string>EQUIPMENT ID</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="searchBtn">
+      <property name="geometry">
+       <rect>
+        <x>490</x>
+        <y>0</y>
+        <width>75</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>SEARCH</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="sortPage"/>
+    <widget class="QWidget" name="collectPage"/>
+    <widget class="QWidget" name="exportPage"/>
     <widget class="QWidget" name="retrievePage">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">

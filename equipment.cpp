@@ -37,7 +37,7 @@ bool Equipment::supprimer(const QSqlDatabase &db, const QString &id) {
     return true;
 }
 
-QList<Equipment> Equipment::retrieveAll(const QSqlDatabase &db) {
+QList<Equipment> Equipment::afficher(const QSqlDatabase &db) {
     QList<Equipment> equipmentList;
     QSqlQuery query(db);
 
@@ -58,4 +58,29 @@ QList<Equipment> Equipment::retrieveAll(const QSqlDatabase &db) {
     }
 
     return equipmentList;
+}
+
+Equipment Equipment::rechercher(const QSqlDatabase &db, const QString &id) {
+    QSqlQuery query(db);
+    query.prepare("SELECT id, name, type, quantity, utility FROM equipments WHERE id = ?");
+    query.addBindValue(id);
+
+    if (!query.exec()) {
+        qDebug() << "Find Error:" << query.lastError().text();
+        return Equipment("", "", "", 0, "");  // Return empty object on error
+    }
+
+    if (query.next()) {
+        // Retrieve data from the query result
+        QString name = query.value(1).toString();
+        QString type = query.value(2).toString();
+        int quantity = query.value(3).toInt();
+        QString utility = query.value(4).toString();
+
+        // Return the found equipment
+        return Equipment(id, name, type, quantity, utility);
+    } else {
+        // Return an empty equipment object if not found
+        return Equipment("", "", "", 0, "");
+    }
 }
