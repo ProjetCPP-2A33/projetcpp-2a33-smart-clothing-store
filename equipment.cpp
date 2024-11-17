@@ -36,3 +36,26 @@ bool Equipment::supprimer(const QSqlDatabase &db, const QString &id) {
 
     return true;
 }
+
+QList<Equipment> Equipment::retrieveAll(const QSqlDatabase &db) {
+    QList<Equipment> equipmentList;
+    QSqlQuery query(db);
+
+    if (!query.exec("SELECT id, name, type, quantity, utility FROM equipments")) {
+        qDebug() << "Retrieve Error:" << query.lastError().text();
+        return equipmentList; // Return empty list on failure
+    }
+
+    while (query.next()) {
+        QString id = query.value(0).toString();
+        QString name = query.value(1).toString();
+        QString type = query.value(2).toString();
+        int quantity = query.value(3).toInt();
+        QString utility = query.value(4).toString();
+
+        Equipment equipment(id, name, type, quantity, utility);
+        equipmentList.append(equipment);
+    }
+
+    return equipmentList;
+}

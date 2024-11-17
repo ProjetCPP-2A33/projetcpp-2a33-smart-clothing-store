@@ -131,8 +131,14 @@
       <height>411</height>
      </rect>
     </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>3</number>
     </property>
     <widget class="QWidget" name="addPage">
      <widget class="QLabel" name="label_2">
@@ -279,13 +285,19 @@
      </widget>
     </widget>
     <widget class="QWidget" name="retrievePage">
-     <widget class="QLabel" name="label_3">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <widget class="QLabel" name="equipmentCountLabel">
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>10</y>
-        <width>281</width>
-        <height>16</height>
+        <y>0</y>
+        <width>951</width>
+        <height>31</height>
        </rect>
       </property>
       <property name="font">
@@ -298,15 +310,24 @@
        <string>ALL EQUIPMENTS: (43 TOTAL)</string>
       </property>
      </widget>
-     <widget class="QListWidget" name="listWidget">
+     <widget class="QTableWidget" name="equipmentsTable">
       <property name="geometry">
        <rect>
-        <x>10</x>
+        <x>25</x>
         <y>40</y>
-        <width>971</width>
-        <height>371</height>
+        <width>951</width>
+        <height>361</height>
        </rect>
       </property>
+      <attribute name="horizontalHeaderStretchLastSection">
+       <bool>true</bool>
+      </attribute>
+      <attribute name="verticalHeaderDefaultSectionSize">
+       <number>25</number>
+      </attribute>
+      <attribute name="verticalHeaderStretchLastSection">
+       <bool>false</bool>
+      </attribute>
      </widget>
     </widget>
    </widget>

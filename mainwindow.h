@@ -31,5 +31,7 @@ private slots:
 private:
     Ui::MainWindow *ui;
     Connection *connection;
+
+    void populateEquipmentsTable();
 };
 #endif // MAINWINDOW_H

@@ -68,9 +68,45 @@ void MainWindow::handleDeleteBtnClick() {
     }
 }
 
+void MainWindow::populateEquipmentsTable() {
+    // Clear the table before populating
+    ui->equipmentsTable->setRowCount(0);
+
+    // Retrieve all equipment data
+    QList<Equipment> equipmentList = Equipment::retrieveAll(connection->getDatabase());
+
+    // Set column headers
+    ui->equipmentsTable->setColumnCount(5);
+    ui->equipmentsTable->setHorizontalHeaderLabels({"ID", "Name", "Type", "Quantity", "Utility"});
+
+    // Populate the table with data
+    for (int i = 0; i < equipmentList.size(); ++i) {
+        const Equipment &equipment = equipmentList[i];
+
+        // Add a new row
+        ui->equipmentsTable->insertRow(i);
+
+        // Populate the row with data
+        ui->equipmentsTable->setItem(i, 0, new QTableWidgetItem(equipment.getId()));
+        ui->equipmentsTable->setItem(i, 1, new QTableWidgetItem(equipment.getName()));
+        ui->equipmentsTable->setItem(i, 2, new QTableWidgetItem(equipment.getType()));
+        ui->equipmentsTable->setItem(i, 3, new QTableWidgetItem(QString::number(equipment.getQuantity())));
+        ui->equipmentsTable->setItem(i, 4, new QTableWidgetItem(equipment.getUtility()));
+
+        int rowCount = ui->equipmentsTable->rowCount();  // Get the number of rows in the table
+
+        // Update the label with the total count
+        QString labelText = QString("ALL EQUIPMENTS: (%1 TOTAL)").arg(rowCount);
+        ui->equipmentCountLabel->setText(labelText);  // Assuming your label has this name
+    }
+}
+
 void MainWindow::goToRetrievePage() {
     int pageIndex = ui->stackedWidget->indexOf(ui->retrievePage);
     ui->stackedWidget->setCurrentIndex(pageIndex);
+
+    // Populate the table with data
+    populateEquipmentsTable();
 }
 
 void MainWindow::goToUpdatePage() {

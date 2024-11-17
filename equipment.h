@@ -9,6 +9,13 @@
 #include <QDebug>
 
 class Equipment {
+private:
+    QString id;
+    QString name;
+    QString type;
+    int quantity;
+    QString utility;
+
 public:
     Equipment(const QString &id, const QString &name, const QString &type, int quantity, const QString &utility);
 
@@ -16,12 +23,13 @@ public:
 
     bool supprimer(const QSqlDatabase &db, const QString &id);
 
-    // Attributes
-    QString id;
-    QString name;
-    QString type;
-    int quantity;
-    QString utility;
+    static QList<Equipment> retrieveAll(const QSqlDatabase &db);
+
+    QString getId() const { return id; }
+    QString getName() const { return name; }
+    QString getType() const { return type; }
+    int getQuantity() const { return quantity; }
+    QString getUtility() const { return utility; }
 };
 
 #endif // EQUIPMENT_H
