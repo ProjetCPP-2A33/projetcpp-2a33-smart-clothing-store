@@ -124,3 +124,25 @@ QList<Equipment> Equipment::trier(const QSqlDatabase &db, bool ascending) {
 
     return equipments;
 }
+
+bool Equipment::mettreAJour(const QSqlDatabase &db) {
+    QSqlQuery query(db);
+    query.prepare("UPDATE equipments SET name = ?, type = ?, quantity = ?, utility = ? WHERE id = ?");
+    query.addBindValue(name);
+    query.addBindValue(type);
+    query.addBindValue(quantity);
+    query.addBindValue(utility);
+    query.addBindValue(id);
+
+    if (!query.exec()) {
+        qDebug() << "Update Error: " << query.lastError().text();
+        return false;
+    }
+
+    if (query.numRowsAffected() == 0) {
+        qDebug() << "No rows updated. Check the equipment ID.";
+        return false;
+    }
+
+    return true;
+}

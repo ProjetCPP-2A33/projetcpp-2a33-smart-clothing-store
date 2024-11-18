@@ -65,9 +65,9 @@
     </property>
     <layout class="QGridLayout" name="gridLayout">
      <item row="0" column="8">
-      <widget class="QPushButton" name="pushButton_8">
+      <widget class="QPushButton" name="exportPageBtn">
        <property name="text">
-        <string>EXPORT AS PDF</string>
+        <string>EXPORT AS CSV</string>
        </property>
       </widget>
      </item>
@@ -145,7 +145,7 @@
      </sizepolicy>
     </property>
     <property name="currentIndex">
-     <number>5</number>
+     <number>7</number>
     </property>
     <widget class="QWidget" name="addPage">
      <widget class="QLabel" name="label_2">
@@ -208,12 +208,12 @@
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="quantityInput">
-         <property name="text">
-          <string/>
-         </property>
-         <property name="placeholderText">
+        <widget class="QSpinBox" name="quantityInput">
+         <property name="specialValueText">
           <string>EQUIPMENT QUANTITY</string>
+         </property>
+         <property name="value">
+          <number>0</number>
          </property>
         </widget>
        </item>
@@ -243,7 +243,140 @@
       </property>
      </widget>
     </widget>
-    <widget class="QWidget" name="updatePage"/>
+    <widget class="QWidget" name="updatePage">
+     <widget class="QLineEdit" name="updateInput">
+      <property name="geometry">
+       <rect>
+        <x>380</x>
+        <y>10</y>
+        <width>281</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="placeholderText">
+       <string>EQUIPMENT ID</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_5">
+      <property name="geometry">
+       <rect>
+        <x>140</x>
+        <y>10</y>
+        <width>231</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Poppins</family>
+        <pointsize>15</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>UPDATE AN EQUIPMENT:</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="updateFindBtn">
+      <property name="geometry">
+       <rect>
+        <x>680</x>
+        <y>10</y>
+        <width>75</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>FIND</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="updateBtn">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>480</x>
+        <y>330</y>
+        <width>75</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>UPDATE</string>
+      </property>
+     </widget>
+     <widget class="QWidget" name="verticalLayoutWidget_2">
+      <property name="geometry">
+       <rect>
+        <x>380</x>
+        <y>60</y>
+        <width>291</width>
+        <height>271</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="updateFormLayout">
+       <item>
+        <widget class="QLineEdit" name="upIDInput">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="placeholderText">
+          <string>EQUIPMENT ID</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="upNameInput">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="placeholderText">
+          <string>EQUIPMENT NAME</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="upTypeInput">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="placeholderText">
+          <string>EQUIPMENT TYPE</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSpinBox" name="upQuantityInput">
+         <property name="specialValueText">
+          <string>EQUIPMENT QUANTITY</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="upUtilityInput">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="placeholderText">
+          <string>EQUIPMENT UTILITY</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
     <widget class="QWidget" name="deletePage">
      <widget class="QLabel" name="label_4">
       <property name="geometry">
@@ -524,7 +657,40 @@
      </widget>
     </widget>
     <widget class="QWidget" name="collectPage"/>
-    <widget class="QWidget" name="exportPage"/>
+    <widget class="QWidget" name="exportPage">
+     <widget class="QLabel" name="equipmentCountLabel_2">
+      <property name="geometry">
+       <rect>
+        <x>320</x>
+        <y>80</y>
+        <width>321</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Poppins</family>
+        <pointsize>15</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>EXPORT ALL EQUIPMENTS AS CSV:</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="exportBtn">
+      <property name="geometry">
+       <rect>
+        <x>390</x>
+        <y>120</y>
+        <width>171</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>EXPORT AS CSV</string>
+      </property>
+     </widget>
+    </widget>
     <widget class="QWidget" name="retrievePage">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">

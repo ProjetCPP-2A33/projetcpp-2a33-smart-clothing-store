@@ -23,6 +23,8 @@ public:
 
     bool supprimer(const QSqlDatabase &db, const QString &id);
 
+    bool mettreAJour(const QSqlDatabase &db);
+
     static QList<Equipment> afficher(const QSqlDatabase &db);
 
     static Equipment rechercher(const QSqlDatabase &db, const QString &id);

@@ -34,3 +34,5 @@ CONFIG += console
 
 RESOURCES += \
     resources.qrc
+
+QT += core gui printsupport

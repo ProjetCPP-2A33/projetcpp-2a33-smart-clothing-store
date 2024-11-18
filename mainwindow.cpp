@@ -1,6 +1,9 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "equipment.h"
+#include <QPrinter>
+#include <QPainter>
+#include <QFileDialog>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -15,12 +18,16 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->addPageBtn, &QPushButton::clicked, this, &MainWindow::goToAddPage);
     connect(ui->searchPageBtn, &QPushButton::clicked, this, &MainWindow::goToSearchPage);
     connect(ui->sortPageBtn, &QPushButton::clicked, this, &MainWindow::goToSortPage);
+    connect(ui->exportPageBtn, &QPushButton::clicked, this, &MainWindow::goToExportPage);
     connect(ui->searchByNamePageBtn, &QPushButton::clicked, this, &MainWindow::goToSearchByNamePage);
     connect(ui->deleteBtn, &QPushButton::clicked, this, &MainWindow::handleDeleteBtnClick);
     connect(ui->searchBtn, &QPushButton::clicked, this, &MainWindow::handleSearchBtnClick);
     connect(ui->searchByNameBtn, &QPushButton::clicked, this, &MainWindow::handleSearchByNameBtnClick);
     connect(ui->ascBtn, &QPushButton::clicked, this, &MainWindow::sortEquipmentsAsc);
     connect(ui->descBtn, &QPushButton::clicked, this, &MainWindow::sortEquipmentsDesc);
+    connect(ui->updateFindBtn, &QPushButton::clicked, this, &MainWindow::findEquipmentToUpdate);
+    connect(ui->updateBtn, &QPushButton::clicked, this, &MainWindow::updateEquipment);
+    connect(ui->exportBtn, &QPushButton::clicked, this, &MainWindow::exportEquipmentsAsCSV);
 }
 
 MainWindow::~MainWindow()
@@ -33,24 +40,40 @@ void MainWindow::setDatabaseConnection(Connection *conn) {
 }
 
 void MainWindow::handleSubmitBtnClick() {
+    // Retrieve input values
     QString id = ui->IDInput->text();
     QString name = ui->nameInput->text();
     QString type = ui->typeInput->text();
-    int quantity = ui->quantityInput->text().toInt();
+    int quantity = ui->quantityInput->value();
     QString utility = ui->utilityInput->text();
 
+    // Check if any input is empty
+    if (id.isEmpty() || name.isEmpty() || type.isEmpty() || utility.isEmpty()) {
+        // Set error message for empty fields
+        ui->statusBar->setStyleSheet("color: red;");
+        ui->statusBar->showMessage("All fields must be filled in!", 5000);
+        return;
+    }
+
+    // Create an Equipment object with the input values
     Equipment equipment(id, name, type, quantity, utility);
 
+    // Try to add the equipment to the database
     if (equipment.ajouter(connection->getDatabase())) {
+        // Success message
+        ui->statusBar->setStyleSheet("color: green;");
         ui->statusBar->showMessage("Data saved to the database.", 5000);
+
+        // Clear the inputs after successful submission
         ui->IDInput->clear();
         ui->nameInput->clear();
         ui->typeInput->clear();
         ui->quantityInput->clear();
         ui->utilityInput->clear();
     } else {
+        // Failure message
         ui->statusBar->setStyleSheet("color: red;");
-        ui->statusBar->showMessage("Failed to add equipment.");
+        ui->statusBar->showMessage("Failed to add equipment.", 5000);
     }
 }
 
@@ -70,7 +93,7 @@ void MainWindow::handleDeleteBtnClick() {
         ui->deleteInput->clear();
     } else {
         ui->statusBar->setStyleSheet("color: red;");
-        ui->statusBar->showMessage("Equipment with this ID was not found.");
+        ui->statusBar->showMessage("Equipment with this ID was not found.", 5000);
     }
 }
 
@@ -85,6 +108,13 @@ void MainWindow::goToRetrievePage() {
 void MainWindow::goToUpdatePage() {
     int pageIndex = ui->stackedWidget->indexOf(ui->updatePage);
     ui->stackedWidget->setCurrentIndex(pageIndex);
+
+    ui->upIDInput->setVisible(false);
+    ui->upNameInput->setVisible(false);
+    ui->upTypeInput->setVisible(false);
+    ui->upQuantityInput->setVisible(false);
+    ui->upUtilityInput->setVisible(false);
+    ui->updateBtn->setVisible(false);
 }
 
 void MainWindow::goToAddPage() {
@@ -123,6 +153,10 @@ void MainWindow::goToSortPage() {
     sortEquipmentsAsc();
 }
 
+void MainWindow::goToExportPage() {
+    int pageIndex = ui->stackedWidget->indexOf(ui->exportPage);
+    ui->stackedWidget->setCurrentIndex(pageIndex);
+}
 
 void MainWindow::populateEquipmentsTable() {
     // Clear the table before populating
@@ -202,7 +236,7 @@ void MainWindow::handleSearchByNameBtnClick() {
 
     if (searchQuery.isEmpty()) {
         ui->statusBar->setStyleSheet("color: red;");
-        ui->statusBar->showMessage("Please enter a name to search.");
+        ui->statusBar->showMessage("Please enter a name to search.", 5000);
         return;
     }
 
@@ -225,11 +259,11 @@ void MainWindow::handleSearchByNameBtnClick() {
 
         // Success message
         ui->statusBar->setStyleSheet("color: green;");
-        ui->statusBar->showMessage(QString::number(results.size()) + " equipment(s) found.");
+        ui->statusBar->showMessage(QString::number(results.size()) + " equipment(s) found.", 6000);
     } else {
         // No results found
         ui->statusBar->setStyleSheet("color: red;");
-        ui->statusBar->showMessage("No equipment found with the name '" + searchQuery + "'.");
+        ui->statusBar->showMessage("No equipment found with the name '" + searchQuery + "'.", 5000);
     }
 }
 
@@ -264,4 +298,118 @@ void MainWindow::sortEquipmentsAsc() {
 void MainWindow::sortEquipmentsDesc() {
     sortEquipments(false);
 }
+
+void MainWindow::findEquipmentToUpdate() {
+    QString id = ui->updateInput->text().trimmed();
+
+    if (id.isEmpty()) {
+        ui->statusBar->showMessage("Please enter a valid equipment ID.", 3000);
+        return;
+    }
+
+    Equipment foundEquipment = Equipment::rechercher(connection->getDatabase(), id);
+
+    if (foundEquipment.getId().isEmpty()) { // Equipment not found
+        ui->statusBar->showMessage("Equipment not found. Check the ID and try again.", 3000);
+        ui->statusBar->setStyleSheet("color: red;");
+        return;
+    }
+
+    // Populate inputs with the found equipment details
+    ui->upIDInput->setText(foundEquipment.getId());
+    ui->upNameInput->setText(foundEquipment.getName());
+    ui->upTypeInput->setText(foundEquipment.getType());
+    ui->upQuantityInput->setValue(foundEquipment.getQuantity());
+    ui->upUtilityInput->setText(foundEquipment.getUtility());
+
+    ui->upIDInput->setVisible(true);
+    ui->upNameInput->setVisible(true);
+    ui->upTypeInput->setVisible(true);
+    ui->upQuantityInput->setVisible(true);
+    ui->upUtilityInput->setVisible(true);
+    ui->updateBtn->setVisible(true);
+
+    ui->statusBar->showMessage("Equipment found. Edit the details and click Update.", 3000);
+    ui->statusBar->setStyleSheet("color: green;");
+}
+
+void MainWindow::updateEquipment() {
+    QString id = ui->upIDInput->text().trimmed();
+    QString name = ui->upNameInput->text().trimmed();
+    QString type = ui->upTypeInput->text().trimmed();
+    int quantity = ui->upQuantityInput->value();
+    QString utility = ui->upUtilityInput->text().trimmed();
+
+    if (id.isEmpty() || name.isEmpty() || type.isEmpty() || utility.isEmpty()) {
+        ui->statusBar->showMessage("Please fill in all fields before updating.", 3000);
+        ui->statusBar->setStyleSheet("color: red;");
+        return;
+    }
+
+    Equipment equipment(id, name, type, quantity, utility);
+    if (equipment.mettreAJour(connection->getDatabase())) {
+        ui->statusBar->showMessage("Equipment updated successfully!", 3000);
+        ui->statusBar->setStyleSheet("color: green;");
+
+        ui->upIDInput->setVisible(false);
+        ui->upNameInput->setVisible(false);
+        ui->upTypeInput->setVisible(false);
+        ui->upQuantityInput->setVisible(false);
+        ui->upUtilityInput->setVisible(false);
+        ui->updateBtn->setVisible(false);
+    } else {
+        ui->statusBar->showMessage("Failed to update equipment. Check the logs for details.", 3000);
+        ui->statusBar->setStyleSheet("color: red;");
+    }
+}
+
+void MainWindow::exportEquipmentsAsCSV() {
+    // Open a file dialog to choose where to save the CSV
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Save CSV"), "", tr("CSV Files (*.csv)"));
+    if (fileName.isEmpty()) {
+        return; // If no file is chosen, do nothing
+    }
+
+    // Open the file for writing
+    QFile file(fileName);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        qWarning() << "Failed to open the file for writing!";
+        return;
+    }
+
+    // Create a text stream to write data
+    QTextStream out(&file);
+
+    // Write the headers to the CSV
+    out << "ID,Name,Type,Quantity,Utility\n"; // Column headers
+
+    // Retrieve equipment data from the database
+    QList<Equipment> equipmentList = Equipment::afficher(connection->getDatabase());
+
+    // Write each equipment's data to the CSV
+    for (const Equipment& equipment : equipmentList) {
+        out << equipment.getId() << ","
+            << equipment.getName() << ","
+            << equipment.getType() << ","
+            << equipment.getQuantity() << ","
+            << equipment.getUtility() << "\n"; // Row data
+    }
+
+    // Close the file after writing
+    file.close();
+
+    // Show a success message
+    ui->statusBar->setStyleSheet("color: green;");
+    ui->statusBar->showMessage("Equipment list exported as CSV.");
+}
+
+
+
+
+
+
+
+
+
+
 
