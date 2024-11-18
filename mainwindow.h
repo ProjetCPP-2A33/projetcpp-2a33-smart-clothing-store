@@ -24,11 +24,17 @@ private slots:
     void handleSubmitBtnClick();
     void handleDeleteBtnClick();
     void handleSearchBtnClick();
+    void handleSearchByNameBtnClick();
     void goToAddPage();
     void goToRetrievePage();
     void goToUpdatePage();
     void goToDeletePage();
     void goToSearchPage();
+    void goToSearchByNamePage();
+    void goToSortPage();
+    void sortEquipments(bool ascending);
+    void sortEquipmentsAsc();
+    void sortEquipmentsDesc();
 
 private:
     Ui::MainWindow *ui;

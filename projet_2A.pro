@@ -31,3 +31,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 QT += sql
 CONFIG += console
+
+RESOURCES += \
+    resources.qrc

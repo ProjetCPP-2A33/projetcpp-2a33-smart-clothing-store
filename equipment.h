@@ -26,6 +26,8 @@ public:
     static QList<Equipment> afficher(const QSqlDatabase &db);
 
     static Equipment rechercher(const QSqlDatabase &db, const QString &id);
+    static QList<Equipment> rechercherParNom(const QSqlDatabase &db, const QString &name);
+    static QList<Equipment> trier(const QSqlDatabase &db, bool ascending);
 
     QString getId() const { return id; }
     QString getName() const { return name; }

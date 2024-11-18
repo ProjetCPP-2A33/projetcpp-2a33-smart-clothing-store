@@ -84,3 +84,43 @@ Equipment Equipment::rechercher(const QSqlDatabase &db, const QString &id) {
         return Equipment("", "", "", 0, "");
     }
 }
+
+QList<Equipment> Equipment::rechercherParNom(const QSqlDatabase &db, const QString &name) {
+    QList<Equipment> equipments;
+    QSqlQuery query(db);
+    query.prepare("SELECT id, name, type, quantity, utility FROM equipments WHERE name LIKE ?");
+    query.addBindValue("%" + name + "%");  // Using LIKE for partial match (contains)
+    query.exec();
+
+    while (query.next()) {
+        equipments.append(Equipment(query.value(0).toString(),
+                                    query.value(1).toString(),
+                                    query.value(2).toString(),
+                                    query.value(3).toInt(),
+                                    query.value(4).toString()));
+    }
+    return equipments;
+}
+
+QList<Equipment> Equipment::trier(const QSqlDatabase &db, bool ascending) {
+    QList<Equipment> equipments;
+
+    QString sortOrder = ascending ? "ASC" : "DESC";
+    QSqlQuery query(db);
+    query.prepare("SELECT id, name, type, quantity, utility FROM equipments ORDER BY quantity " + sortOrder);
+
+    if (!query.exec()) {
+        qDebug() << "Error sorting equipments: " << query.lastError().text();
+        return equipments;
+    }
+
+    while (query.next()) {
+        equipments.append(Equipment(query.value("id").toString(),
+                                    query.value("name").toString(),
+                                    query.value("type").toString(),
+                                    query.value("quantity").toInt(),
+                                    query.value("utility").toString()));
+    }
+
+    return equipments;
+}

@@ -14,9 +14,13 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->deletePageBtn, &QPushButton::clicked, this, &MainWindow::goToDeletePage);
     connect(ui->addPageBtn, &QPushButton::clicked, this, &MainWindow::goToAddPage);
     connect(ui->searchPageBtn, &QPushButton::clicked, this, &MainWindow::goToSearchPage);
+    connect(ui->sortPageBtn, &QPushButton::clicked, this, &MainWindow::goToSortPage);
+    connect(ui->searchByNamePageBtn, &QPushButton::clicked, this, &MainWindow::goToSearchByNamePage);
     connect(ui->deleteBtn, &QPushButton::clicked, this, &MainWindow::handleDeleteBtnClick);
     connect(ui->searchBtn, &QPushButton::clicked, this, &MainWindow::handleSearchBtnClick);
-
+    connect(ui->searchByNameBtn, &QPushButton::clicked, this, &MainWindow::handleSearchByNameBtnClick);
+    connect(ui->ascBtn, &QPushButton::clicked, this, &MainWindow::sortEquipmentsAsc);
+    connect(ui->descBtn, &QPushButton::clicked, this, &MainWindow::sortEquipmentsDesc);
 }
 
 MainWindow::~MainWindow()
@@ -101,6 +105,25 @@ void MainWindow::goToSearchPage() {
     ui->searchTable->setHorizontalHeaderLabels({"ID", "Name", "Type", "Quantity", "Utility"});
 }
 
+void MainWindow::goToSearchByNamePage() {
+    int pageIndex = ui->stackedWidget->indexOf(ui->searchByNamePage);
+    ui->stackedWidget->setCurrentIndex(pageIndex);
+
+    ui->searchByNameTable->setColumnCount(5);
+    ui->searchByNameTable->setHorizontalHeaderLabels({"ID", "Name", "Type", "Quantity", "Utility"});
+}
+
+void MainWindow::goToSortPage() {
+    int pageIndex = ui->stackedWidget->indexOf(ui->sortPage);
+    ui->stackedWidget->setCurrentIndex(pageIndex);
+
+    ui->sortTable->setColumnCount(5);
+    ui->sortTable->setHorizontalHeaderLabels({"ID", "Name", "Type", "Quantity", "Utility"});
+
+    sortEquipmentsAsc();
+}
+
+
 void MainWindow::populateEquipmentsTable() {
     // Clear the table before populating
     ui->equipmentsTable->setRowCount(0);
@@ -173,3 +196,72 @@ void MainWindow::handleSearchBtnClick() {
         ui->statusBar->showMessage("No equipment found with the given ID.", 5000);
     }
 }
+
+void MainWindow::handleSearchByNameBtnClick() {
+    QString searchQuery = ui->searchByNameInput->text();  // Get the text entered by the user
+
+    if (searchQuery.isEmpty()) {
+        ui->statusBar->setStyleSheet("color: red;");
+        ui->statusBar->showMessage("Please enter a name to search.");
+        return;
+    }
+
+    QList<Equipment> results = Equipment::rechercherParNom(connection->getDatabase(), searchQuery);
+
+    // Clear the table before inserting new results
+    ui->searchByNameTable->setRowCount(0);
+
+    if (!results.isEmpty()) {
+        // Add each equipment to the table
+        for (const Equipment &equipment : results) {
+            int row = ui->searchByNameTable->rowCount();
+            ui->searchByNameTable->insertRow(row);
+            ui->searchByNameTable->setItem(row, 0, new QTableWidgetItem(equipment.getId()));
+            ui->searchByNameTable->setItem(row, 1, new QTableWidgetItem(equipment.getName()));
+            ui->searchByNameTable->setItem(row, 2, new QTableWidgetItem(equipment.getType()));
+            ui->searchByNameTable->setItem(row, 3, new QTableWidgetItem(QString::number(equipment.getQuantity())));
+            ui->searchByNameTable->setItem(row, 4, new QTableWidgetItem(equipment.getUtility()));
+        }
+
+        // Success message
+        ui->statusBar->setStyleSheet("color: green;");
+        ui->statusBar->showMessage(QString::number(results.size()) + " equipment(s) found.");
+    } else {
+        // No results found
+        ui->statusBar->setStyleSheet("color: red;");
+        ui->statusBar->showMessage("No equipment found with the name '" + searchQuery + "'.");
+    }
+}
+
+void MainWindow::sortEquipments(bool ascending) {
+    // Get sorted equipment list from the database
+    QList<Equipment> equipments = Equipment::trier(connection->getDatabase(), ascending);
+
+    // Clear the table and populate it with sorted equipments
+    ui->sortTable->setRowCount(0);
+    for (int i = 0; i < equipments.size(); ++i) {
+        const Equipment &equipment = equipments[i];
+        ui->sortTable->insertRow(i);
+
+        ui->sortTable->setItem(i, 0, new QTableWidgetItem(equipment.getId()));
+        ui->sortTable->setItem(i, 1, new QTableWidgetItem(equipment.getName()));
+        ui->sortTable->setItem(i, 2, new QTableWidgetItem(equipment.getType()));
+        ui->sortTable->setItem(i, 3, new QTableWidgetItem(QString::number(equipment.getQuantity())));
+        ui->sortTable->setItem(i, 4, new QTableWidgetItem(equipment.getUtility()));
+    }
+
+    // Update sortLabel with the current sort order
+    QString sortOrder = ascending ? "ASCENDING" : "DESCENDING";
+    ui->sortLabel->setText(QString("(%1 TOTAL EQUIPMENTS SORTED %2)")
+                               .arg(equipments.size())
+                               .arg(sortOrder));
+}
+
+void MainWindow::sortEquipmentsAsc() {
+    sortEquipments(true);
+}
+
+void MainWindow::sortEquipmentsDesc() {
+    sortEquipments(false);
+}
+
