@@ -32,10 +32,15 @@ private slots:
 
      void on_pdf_cd_clicked();
 
+     void on_calendarWidget_selectionChanged();
+
 private:
     Ui::MainWindow *ui;
     void populateStatutComboBox() ;
     void generatePDF( QString filePath);
     void displayCommandeStat();
+  void sendOrderConfirmationSMS();
+    void populateClientComboBox();
+    void sendSMS(const QString& to, const QString& message);
 };
 #endif // MAINWINDOW_H

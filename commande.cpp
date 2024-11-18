@@ -3,15 +3,14 @@
 #include <QVariant>
 #include <QDebug>
 
-
 // Constructeurs
 Commande::Commande() {}
 
-Commande::Commande(int id, QDate date_creation, QString statut, int quantite, int montant_total)
-    : id(id), date_creation(date_creation), statut(statut), quantite(quantite), montant_total(montant_total) {}
+Commande::Commande(int id, QDate date_creation, QString statut, int quantite, int montant_total, int id_client)
+    : id(id), date_creation(date_creation), statut(statut), quantite(quantite), montant_total(montant_total), id_client(id_client) {}
 
-Commande::Commande(QDate date_creation, QString statut, int quantite, int montant_total)
-    : date_creation(date_creation), statut(statut), quantite(quantite), montant_total(montant_total) {}
+Commande::Commande(QDate date_creation, QString statut, int quantite, int montant_total, int id_client)
+    : date_creation(date_creation), statut(statut), quantite(quantite), montant_total(montant_total), id_client(id_client) {}
 
 // Getters
 int Commande::getID() const {
@@ -32,6 +31,10 @@ int Commande::getMontantTotal() const {
 
 int Commande::getQuantite() const {
     return quantite;
+}
+
+int Commande::getClientID() const {
+    return id_client;
 }
 
 // Setters
@@ -55,24 +58,24 @@ void Commande::setQuantite(int quantite) {
     this->quantite = quantite;
 }
 
+void Commande::setClientID(int id_client) {
+    this->id_client = id_client;
+}
 
 // Méthodes de gestion de la base de données
 bool Commande::ajouter() {
     QSqlQuery query;
 
-    query.prepare("INSERT INTO commande (date_creation, statut, quantite, montant_tel) "
-                  "VALUES (:date_creation, :statut, :quantite, :montant_total)");
-
-    // Convert QDate to string for the database if necessary
+    // Exclude the id from the INSERT statement, let the database auto-generate it
+    query.prepare("INSERT INTO commande (date_creation, statut, quantite, montant_tel, id_client) "
+                  "VALUES (:date_creation, :statut, :quantite, :montant_tel, :id_client)");
 
     query.bindValue(":date_creation", date_creation);
     query.bindValue(":statut", statut);
     query.bindValue(":quantite", quantite);
-    query.bindValue(":montant_total", montant_total);
+    query.bindValue(":montant_tel", montant_total);
+    query.bindValue(":id_client", id_client);
 
-
-
-    // Execute the query and handle potential errors
     if (!query.exec()) {
         qDebug() << "Database error:" << query.lastError().text();
         return false;
@@ -81,15 +84,15 @@ bool Commande::ajouter() {
     return true;
 }
 
-
 QSqlQueryModel* Commande::afficher() {
     QSqlQueryModel* model = new QSqlQueryModel();
     model->setQuery("SELECT * FROM commande ORDER BY id");
     model->setHeaderData(0, Qt::Horizontal, QObject::tr("ID"));
     model->setHeaderData(1, Qt::Horizontal, QObject::tr("Date de Création"));
     model->setHeaderData(2, Qt::Horizontal, QObject::tr("Statut"));
-    model->setHeaderData(3, Qt::Horizontal, QObject::tr("Quantite "));
+    model->setHeaderData(3, Qt::Horizontal, QObject::tr("Quantité"));
     model->setHeaderData(4, Qt::Horizontal, QObject::tr("Montant Total"));
+    model->setHeaderData(5, Qt::Horizontal, QObject::tr("ID Client"));
 
     return model;
 }
@@ -105,15 +108,18 @@ bool Commande::modifier(int id) {
     QSqlQuery query;
 
     query.prepare("UPDATE commande SET date_creation = :date_creation, statut = :statut, "
-                  "quantite = :quantite, montant_tel = :montant_tel WHERE id = :id");
+                  "quantite = :quantite, montant_tel = :montant_tel, id_client = :id_client WHERE id = :id");
+
     query.bindValue(":id", id);
     query.bindValue(":date_creation", date_creation);
     query.bindValue(":statut", statut);
     query.bindValue(":quantite", quantite);
-    query.bindValue(":montant_tel", montant_total);
+    query.bindValue(":montant_tel", montant_total);  // Ensure the variable matches your field name
+    query.bindValue(":id_client", id_client);
 
     return query.exec();
 }
+
 
 QSqlQueryModel* Commande::rechercherParStatut(QString terme) {
     QSqlQueryModel* model = new QSqlQueryModel();

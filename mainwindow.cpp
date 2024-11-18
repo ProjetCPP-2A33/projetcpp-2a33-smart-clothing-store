@@ -15,15 +15,29 @@
 #include <QVBoxLayout>
 
 
+
+
+
+
+#include <QNetworkAccessManager>
+#include <QNetworkRequest>
+#include <QNetworkReply>
+#include <QUrl>
+#include <QUrlQuery>
+#include <QTextStream>
+
+
 Commande commande;
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    connect(ui->calendarWidget, &QCalendarWidget::selectionChanged, this, &MainWindow::on_calendarWidget_selectionChanged);
     ui->tableView_commande->setModel(commande.afficher());
     populateStatutComboBox();
     displayCommandeStat();
+    populateClientComboBox();
 
 }
 
@@ -33,7 +47,7 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::populateStatutComboBox() {
-    ui->comboBox_satut->addItem("Completee ");
+    ui->comboBox_satut->addItem("Confrimee ");
     ui->comboBox_satut->addItem("Annulee");
     ui->comboBox_satut->addItem("En attente");
 }
@@ -46,7 +60,8 @@ void MainWindow::on_ajouter_cd_clicked()
         QString statut = ui->comboBox_satut->currentText();
         int quantity = ui->lineEdit_quantite->text().toInt();
         int montant_total = ui->lineEdit_montant->text().toInt();
-
+        int id_client = ui->comboBox_client->currentData().toInt();
+        /////////CONTROLE DE SAISIE
         // Check if the statut is selected
         if (statut.isEmpty()) {
             QMessageBox::warning(this, "Statut manquant", "Veuillez sélectionner un statut.");
@@ -73,14 +88,16 @@ void MainWindow::on_ajouter_cd_clicked()
             }
 
         // Créer une instance de la classe Commande avec les données récupérées
-        Commande commande(date_creation, statut, quantity, montant_total);
+        Commande commande(date_creation, statut, quantity, montant_total, id_client);
 
         // Appeler la méthode ajouter() pour insérer les données dans la base de données
         bool success = commande.ajouter();
 
         // Afficher un message en fonction du résultat de l'opération
         if (success) {
+            sendOrderConfirmationSMS();
             displayCommandeStat();
+
             QMessageBox::information(this, "Succès", "La commande a été ajoutée avec succès.");
 
             // Optionnel : Effacer les champs après ajout
@@ -105,6 +122,7 @@ void MainWindow::on_modfi_cd_clicked()
        int quantite = ui->lineEdit_quantite->text().toInt();
 
        int montant_total = ui->lineEdit_montant->text().toInt();
+       int id_client = ui->comboBox_client->currentData().toInt();
 
        // Create a Commande object with the updated data
 
@@ -138,7 +156,7 @@ void MainWindow::on_modfi_cd_clicked()
                QMessageBox::warning(this, "Date invalide", "La date de création doit être valide et ne peut pas être antérieure à aujourd'hui.");
                return;
            }
-       Commande commande(id, date_creation, statut, quantite, montant_total);
+           Commande commande(id, date_creation, statut, quantite, montant_total, id_client);
 
        // Call the modifier() method to update the record in the database
        bool success = commande.modifier(id);
@@ -381,4 +399,81 @@ void MainWindow::displayCommandeStat() {
     // Add the chart view to the layout of the parent widget
     ui->frame_cd->layout()->addWidget(chartView);
 }
+
+
+
+
+
+
+void MainWindow::populateClientComboBox() {
+    ui->comboBox_client->clear();
+    QSqlQuery query("SELECT id, nom FROM client");
+    while (query.next()) {
+        int id = query.value(0).toInt();
+        QString name = query.value(1).toString();
+        ui->comboBox_client->addItem(name, id);
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+void MainWindow::on_calendarWidget_selectionChanged()
+{
+    // Get the selected date from the calendar
+    QDate selectedDate = ui->calendarWidget->selectedDate();
+    QString formattedDate = selectedDate.toString("dd-MMM-yy").toUpper();
+
+    // Log the selected date for debugging
+    qDebug() << "Selected Date:" << formattedDate;
+
+    // Fetch the orders created on the selected date from the 'commande' table
+    QSqlQuery query;
+    query.prepare("SELECT c.nom, c.num_tel, cm.date_creation, cm.montant_tel, cm.statut, cm.quantite "
+                  "FROM client c "
+                  "JOIN commande cm ON c.id = cm.id_client "
+                  "WHERE TO_CHAR(cm.date_creation, 'DD-MON-YY') = :selected_date");
+
+    query.bindValue(":selected_date", formattedDate);
+
+    // Log the query being executed for debugging
+    qDebug() << "Executing query:" << query.lastQuery();
+
+    if (!query.exec()) {
+        qDebug() << "Failed to retrieve orders for selected date:" << query.lastError().text();
+        return;
+    }
+
+    // Log the number of rows retrieved for debugging
+    int rowCount = query.size();
+    qDebug() << "Number of rows retrieved:" << rowCount;
+
+    // Create a model to display the data in the QTableView
+    QSqlQueryModel *model = new QSqlQueryModel();
+    model->setQuery(query);
+
+    // Log the number of rows in the model
+    qDebug() << "Rows in the model:" << model->rowCount();
+
+    // Set headers for the table
+    model->setHeaderData(0, Qt::Horizontal, "Client Name");
+    model->setHeaderData(1, Qt::Horizontal, "Phone Number");
+    model->setHeaderData(2, Qt::Horizontal, "Order Date");
+    model->setHeaderData(3, Qt::Horizontal, "Total Amount");
+    model->setHeaderData(4, Qt::Horizontal, "Status");
+    model->setHeaderData(5, Qt::Horizontal, "Quantity");
+
+    // Display the data in a table view
+    ui->tableView_commande->setModel(model);
+    ui->tableView_commande->resizeColumnsToContents();
+}
+
+
 
