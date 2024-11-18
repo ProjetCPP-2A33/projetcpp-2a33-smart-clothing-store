@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 QT       += core gui sql
+=======
+QT       += core gui sql network
+>>>>>>> 6c5f7e3 (Ajout des fonctionnalités de gestion des clients)
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 CONFIG += c++17
 
@@ -10,6 +14,10 @@ SOURCES += \
     client.cpp \
     clientswindow.cpp \
     connection.cpp \
+<<<<<<< HEAD
+=======
+    imagedelegate.cpp \
+>>>>>>> 6c5f7e3 (Ajout des fonctionnalités de gestion des clients)
     main.cpp \
     mainwindow.cpp
 
@@ -17,6 +25,10 @@ HEADERS += \
     client.h \
     clientswindow.h \
     connection.h \
+<<<<<<< HEAD
+=======
+    imagedelegate.h \
+>>>>>>> 6c5f7e3 (Ajout des fonctionnalités de gestion des clients)
     mainwindow.h
 
 FORMS += \

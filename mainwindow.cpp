@@ -40,9 +40,15 @@ MainWindow::MainWindow(QWidget *parent)
                           "border: 2px solid lightgreen;"
                           "border-radius: 10px;"
                           "font-family: 'Segoe UI Black';"
+<<<<<<< HEAD
                           "font-size: 14px;}"
                           "QPushButton:hover {"
                           "background-color: rgb(140, 170, 170);}"
+=======
+                          "font-size: 19px;}"
+                          "QPushButton:hover {"
+                          "background-color: rgb(219, 254, 212);}"
+>>>>>>> 6c5f7e3 (Ajout des fonctionnalités de gestion des clients)
                           "QPushButton:pressed {"
                           "background-color: lightgreen;}";
 
@@ -58,6 +64,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 void MainWindow::openClientsWindow() {
     ClientsWindow *clientsWindow = new ClientsWindow(this);
+<<<<<<< HEAD
        clientsWindow->move(this->x(), this->y());
 
        Client client;
@@ -68,6 +75,18 @@ void MainWindow::openClientsWindow() {
 
        // Appeler la méthode publique qui appelle 'on_pushButton_clients_clicked'
        clientsWindow->afficherStatistiques(); // Afficher les statistiques
+=======
+        clientsWindow->move(this->x(), this->y());  // Position the new window
+
+        Client client;
+        QSqlQueryModel *model = client.afficher();  // Get model from client
+        clientsWindow->setTableViewModel(model);    // Set model in ClientsWindow
+
+        clientsWindow->show();
+
+        // Optionally call a method to show statistics or other actions
+        clientsWindow->afficherStatistiques(); // Show statistics if needed
+>>>>>>> 6c5f7e3 (Ajout des fonctionnalités de gestion des clients)
 }
 
 void MainWindow::closeApplication() {
