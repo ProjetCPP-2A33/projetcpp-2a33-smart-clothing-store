@@ -1,4 +1,4 @@
-QT       += core gui sql
+QT       += core gui sql printsupport charts
 QT+= sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
@@ -27,7 +27,6 @@ SOURCES += \
 HEADERS += \
     connection.h \
     employe.h \
-    header.h \
     mainwindow.h
 
 FORMS += \
@@ -39,7 +38,8 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 RESOURCES += \
-    resoureces.qrc
+    resoureces.qrc \
+    ressources.qrc
 
 DISTFILES += \
     intgr.pro.user \

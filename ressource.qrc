@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/bg.jpeg</file>
+        <file>images/headhunting.png</file>
+        <file>images/add-user.png</file>
+        <file>images/edit-button.png</file>
+    </qresource>
+</RCC>
