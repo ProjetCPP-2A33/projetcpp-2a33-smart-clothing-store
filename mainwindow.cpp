@@ -20,6 +20,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->sortPageBtn, &QPushButton::clicked, this, &MainWindow::goToSortPage);
     connect(ui->exportPageBtn, &QPushButton::clicked, this, &MainWindow::goToExportPage);
     connect(ui->searchByNamePageBtn, &QPushButton::clicked, this, &MainWindow::goToSearchByNamePage);
+    connect(ui->statPageBtn, &QPushButton::clicked, this, &MainWindow::goToStatPage);
     connect(ui->deleteBtn, &QPushButton::clicked, this, &MainWindow::handleDeleteBtnClick);
     connect(ui->searchBtn, &QPushButton::clicked, this, &MainWindow::handleSearchBtnClick);
     connect(ui->searchByNameBtn, &QPushButton::clicked, this, &MainWindow::handleSearchByNameBtnClick);
@@ -155,6 +156,12 @@ void MainWindow::goToSortPage() {
 
 void MainWindow::goToExportPage() {
     int pageIndex = ui->stackedWidget->indexOf(ui->exportPage);
+    ui->stackedWidget->setCurrentIndex(pageIndex);
+}
+
+void MainWindow::goToStatPage() {
+    renderStatisticsPage();
+    int pageIndex = ui->stackedWidget->indexOf(ui->statPage);
     ui->stackedWidget->setCurrentIndex(pageIndex);
 }
 
@@ -364,29 +371,23 @@ void MainWindow::updateEquipment() {
 }
 
 void MainWindow::exportEquipmentsAsCSV() {
-    // Open a file dialog to choose where to save the CSV
     QString fileName = QFileDialog::getSaveFileName(this, tr("Save CSV"), "", tr("CSV Files (*.csv)"));
     if (fileName.isEmpty()) {
-        return; // If no file is chosen, do nothing
+        return;
     }
 
-    // Open the file for writing
     QFile file(fileName);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
         qWarning() << "Failed to open the file for writing!";
         return;
     }
 
-    // Create a text stream to write data
     QTextStream out(&file);
 
-    // Write the headers to the CSV
-    out << "ID,Name,Type,Quantity,Utility\n"; // Column headers
+    out << "ID,Name,Type,Quantity,Utility\n";
 
-    // Retrieve equipment data from the database
     QList<Equipment> equipmentList = Equipment::afficher(connection->getDatabase());
 
-    // Write each equipment's data to the CSV
     for (const Equipment& equipment : equipmentList) {
         out << equipment.getId() << ","
             << equipment.getName() << ","
@@ -395,13 +396,59 @@ void MainWindow::exportEquipmentsAsCSV() {
             << equipment.getUtility() << "\n"; // Row data
     }
 
-    // Close the file after writing
     file.close();
 
-    // Show a success message
     ui->statusBar->setStyleSheet("color: green;");
     ui->statusBar->showMessage("Equipment list exported as CSV.");
 }
+
+void MainWindow::renderStatisticsPage() {
+    QSqlDatabase db = connection->getDatabase();
+
+    int totalEquipments = Equipment::getTotalEquipmentCount(db);
+    int aboveThreshold = Equipment::getEquipmentCountAboveThreshold(5, db);
+    int belowThreshold = totalEquipments - aboveThreshold;
+
+    double abovePercentage = (aboveThreshold * 100.0) / totalEquipments;
+    double belowPercentage = 100.0 - abovePercentage;
+
+    ui->statLabel->setText(QString("EQUIPMENT STATISTICS: %1 EQUIPMENT IN TOTAL").arg(totalEquipments));
+
+    ui->aboveLabel->setText(QString("%1 EQUIPMENTS ABOVE 5 IN QUANTITY: %2%")
+                                .arg(aboveThreshold)
+                                .arg(QString::number(abovePercentage, 'f', 2)));
+    ui->belowLabel->setText(QString("%1 EQUIPMENTS BELOW 5 IN QUANTITY: %2%")
+                                .arg(belowThreshold)
+                                .arg(QString::number(belowPercentage, 'f', 2)));
+
+    ui->aboveTable->setColumnCount(5);
+    ui->aboveTable->setHorizontalHeaderLabels({"ID", "Name", "Type", "Quantity", "Utility"});
+    ui->belowTable->setColumnCount(5);
+    ui->belowTable->setHorizontalHeaderLabels({"ID", "Name", "Type", "Quantity", "Utility"});
+
+    ui->aboveTable->setRowCount(0);
+    QList<Equipment> aboveList = Equipment::getEquipmentsAboveThreshold(5, db);
+    for (int i = 0; i < aboveList.size(); ++i) {
+        ui->aboveTable->insertRow(i);
+        ui->aboveTable->setItem(i, 0, new QTableWidgetItem(aboveList[i].getId()));
+        ui->aboveTable->setItem(i, 1, new QTableWidgetItem(aboveList[i].getName()));
+        ui->aboveTable->setItem(i, 2, new QTableWidgetItem(aboveList[i].getType()));
+        ui->aboveTable->setItem(i, 3, new QTableWidgetItem(QString::number(aboveList[i].getQuantity())));
+        ui->aboveTable->setItem(i, 4, new QTableWidgetItem(aboveList[i].getUtility()));
+    }
+
+    ui->belowTable->setRowCount(0);
+    QList<Equipment> belowList = Equipment::getEquipmentsBelowThreshold(5, db);
+    for (int i = 0; i < belowList.size(); ++i) {
+        ui->belowTable->insertRow(i);
+        ui->belowTable->setItem(i, 0, new QTableWidgetItem(belowList[i].getId()));
+        ui->belowTable->setItem(i, 1, new QTableWidgetItem(belowList[i].getName()));
+        ui->belowTable->setItem(i, 2, new QTableWidgetItem(belowList[i].getType()));
+        ui->belowTable->setItem(i, 3, new QTableWidgetItem(QString::number(belowList[i].getQuantity())));
+        ui->belowTable->setItem(i, 4, new QTableWidgetItem(belowList[i].getUtility()));
+    }
+}
+
 
 
 

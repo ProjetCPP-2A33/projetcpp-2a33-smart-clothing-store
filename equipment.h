@@ -31,6 +31,11 @@ public:
     static QList<Equipment> rechercherParNom(const QSqlDatabase &db, const QString &name);
     static QList<Equipment> trier(const QSqlDatabase &db, bool ascending);
 
+    static int getTotalEquipmentCount(QSqlDatabase db);
+    static int getEquipmentCountAboveThreshold(int threshold, QSqlDatabase db);
+    static QList<Equipment> getEquipmentsBelowThreshold(int threshold, QSqlDatabase db);
+    static QList<Equipment> getEquipmentsAboveThreshold(int threshold, QSqlDatabase db);
+
     QString getId() const { return id; }
     QString getName() const { return name; }
     QString getType() const { return type; }

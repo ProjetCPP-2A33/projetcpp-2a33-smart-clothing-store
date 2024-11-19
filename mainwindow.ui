@@ -86,9 +86,9 @@
       </widget>
      </item>
      <item row="0" column="7">
-      <widget class="QPushButton" name="pushButton_6">
+      <widget class="QPushButton" name="statPageBtn">
        <property name="text">
-        <string>COLLECT BY TYPE</string>
+        <string>STATISTICS</string>
        </property>
       </widget>
      </item>
@@ -145,7 +145,7 @@
      </sizepolicy>
     </property>
     <property name="currentIndex">
-     <number>7</number>
+     <number>6</number>
     </property>
     <widget class="QWidget" name="addPage">
      <widget class="QLabel" name="label_2">
@@ -656,7 +656,103 @@
       </property>
      </widget>
     </widget>
-    <widget class="QWidget" name="collectPage"/>
+    <widget class="QWidget" name="statPage">
+     <widget class="QTableWidget" name="belowTable">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>70</y>
+        <width>471</width>
+        <height>331</height>
+       </rect>
+      </property>
+      <attribute name="horizontalHeaderStretchLastSection">
+       <bool>true</bool>
+      </attribute>
+      <attribute name="verticalHeaderDefaultSectionSize">
+       <number>25</number>
+      </attribute>
+      <attribute name="verticalHeaderStretchLastSection">
+       <bool>false</bool>
+      </attribute>
+     </widget>
+     <widget class="QLabel" name="statLabel">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>0</y>
+        <width>951</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Poppins</family>
+        <pointsize>15</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>EQUIPMENT STATISTICS: (43 EQUIPMENT IN TOTAL)</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="belowLabel">
+      <property name="geometry">
+       <rect>
+        <x>80</x>
+        <y>40</y>
+        <width>401</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Poppins</family>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>EQUIPMENTS BELOW 5 IN QUANTITY: 56%</string>
+      </property>
+     </widget>
+     <widget class="QTableWidget" name="aboveTable">
+      <property name="geometry">
+       <rect>
+        <x>500</x>
+        <y>70</y>
+        <width>461</width>
+        <height>331</height>
+       </rect>
+      </property>
+      <attribute name="horizontalHeaderStretchLastSection">
+       <bool>true</bool>
+      </attribute>
+      <attribute name="verticalHeaderDefaultSectionSize">
+       <number>25</number>
+      </attribute>
+      <attribute name="verticalHeaderStretchLastSection">
+       <bool>false</bool>
+      </attribute>
+     </widget>
+     <widget class="QLabel" name="aboveLabel">
+      <property name="geometry">
+       <rect>
+        <x>570</x>
+        <y>40</y>
+        <width>391</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Poppins</family>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>EQUIPMENTS ABOVE 5 IN QUANTITY: 56%</string>
+      </property>
+     </widget>
+    </widget>
     <widget class="QWidget" name="exportPage">
      <widget class="QLabel" name="equipmentCountLabel_2">
       <property name="geometry">

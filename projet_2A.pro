@@ -10,14 +10,12 @@ CONFIG += c++17
 
 SOURCES += \
     equipment.cpp \
-    equipmentcard.cpp \
     main.cpp \
     mainwindow.cpp \
     connection.cpp
 
 HEADERS += \
     equipment.h \
-    equipmentcard.h \
     mainwindow.h \
     connection.h
 

@@ -71,16 +71,13 @@ Equipment Equipment::rechercher(const QSqlDatabase &db, const QString &id) {
     }
 
     if (query.next()) {
-        // Retrieve data from the query result
         QString name = query.value(1).toString();
         QString type = query.value(2).toString();
         int quantity = query.value(3).toInt();
         QString utility = query.value(4).toString();
 
-        // Return the found equipment
         return Equipment(id, name, type, quantity, utility);
     } else {
-        // Return an empty equipment object if not found
         return Equipment("", "", "", 0, "");
     }
 }
@@ -145,4 +142,61 @@ bool Equipment::mettreAJour(const QSqlDatabase &db) {
     }
 
     return true;
+}
+
+int Equipment::getTotalEquipmentCount(QSqlDatabase db) {
+    QSqlQuery query(db);
+    query.prepare("SELECT COUNT(*) FROM equipments");
+    if (query.exec() && query.next()) {
+        return query.value(0).toInt();
+    }
+    return 0;
+}
+
+int Equipment::getEquipmentCountAboveThreshold(int threshold, QSqlDatabase db) {
+    QSqlQuery query(db);
+    query.prepare("SELECT COUNT(*) FROM equipments WHERE quantity > :threshold");
+    query.bindValue(":threshold", threshold);
+    if (query.exec() && query.next()) {
+        return query.value(0).toInt();
+    }
+    return 0;
+}
+
+QList<Equipment> Equipment::getEquipmentsBelowThreshold(int threshold, QSqlDatabase db) {
+    QSqlQuery query(db);
+    query.prepare("SELECT * FROM equipments WHERE quantity <= :threshold");
+    query.bindValue(":threshold", threshold);
+    QList<Equipment> list;
+    if (query.exec()) {
+        while (query.next()) {
+            Equipment eq(query.value(0).toString(),
+                         query.value(1).toString(),
+                         query.value(2).toString(),
+                         query.value(3).toInt(),
+                         query.value(4).toString());
+            list.append(eq);
+        }
+    }
+    return list;
+}
+
+QList<Equipment> Equipment::getEquipmentsAboveThreshold(int threshold, QSqlDatabase db) {
+    QSqlQuery query(db);
+    query.prepare("SELECT * FROM equipments WHERE quantity > :threshold");
+    query.bindValue(":threshold", threshold);
+    QList<Equipment> list;
+    if (query.exec()) {
+        while (query.next()) {
+            while (query.next()) {
+                Equipment eq(query.value(0).toString(),
+                             query.value(1).toString(),
+                             query.value(2).toString(),
+                             query.value(3).toInt(),
+                             query.value(4).toString());
+                list.append(eq);
+            }
+        }
+    }
+    return list;
 }

@@ -33,12 +33,14 @@ private slots:
     void goToSearchByNamePage();
     void goToSortPage();
     void goToExportPage();
+    void goToStatPage();
     void sortEquipments(bool ascending);
     void sortEquipmentsAsc();
     void sortEquipmentsDesc();
     void findEquipmentToUpdate();
     void updateEquipment();
     void exportEquipmentsAsCSV();
+    void renderStatisticsPage();
 
 private:
     Ui::MainWindow *ui;
