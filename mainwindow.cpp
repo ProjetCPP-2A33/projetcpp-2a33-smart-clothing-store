@@ -1,4 +1,5 @@
 #include "mainwindow.h"
+#include"fournisseur.h"
 #include "ui_mainwindow.h"
 #include <QDebug>
 #include <QMessageBox>
@@ -6,6 +7,7 @@
 #include <QFileDialog>
 #include <QPdfWriter>
 #include <QPainter>
+
 #include <QChartView>
 #include <QPieSeries>
 #include <QPieSlice>
@@ -17,25 +19,36 @@
 #include <QtCharts/QPieSeries>
 #include <QtCharts/QChart>
 #include <QtCharts/QChartView>
+
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <QStackedWidget>
 #include <QRandomGenerator>
 #include <QSqlQueryModel>  // Ajoutez cette ligne pour utiliser QSqlQueryModel
-#include <QSqlQuery>
 #include <QChart>
-#include <QChartView>
-#include <QBarSeries>
-#include <QBarSet>
-#include <QBarCategoryAxis>
-#include <QValueAxis>
+
 #include <QGraphicsProxyWidget>
 #include <QGraphicsScene>
 #include <QSqlRecord>
 
+#include <QTimer>
+
+#include <QSerialPort>
+#include <QSqlQuery>
+#include <QSqlTableModel>
+#include <QMessageBox>
+
+// Initialisation du port série
+QSerialPort serial;
+//QString rfidID;
+
+#include <QLabel>
 
 
+#include "arduino.h"  // Assurez-vous que ce fichier est inclus
 
+// Déclaration de l'objet Arduino à l'intérieur de la classe MainWindow
+Arduino arduino;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -43,18 +56,30 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     // Mettre le QLabel en arrière-plan
-    ui->label_9->lower(); // Assure que le QLabel est sous le QTableView
+    ui->label_2->lower(); // Assure que le QLabel est sous le QTableView
 
     // Remplir l'image
-    ui->label_9->setScaledContents(true); // Optionnel : pour redimensionner l'image à la taille du QLabel
+    ui->label_2->setScaledContents(true); // Optionnel : pour redimensionner l'image à la taille du QLabel
     // Rafraîchir l'interface pour forcer l'affichage de l'image
-    ui->label_9->update();
+    ui->label_2->update();
     ui->tableView->setModel(Etmp.afficher()); // Afficher les fournisseur dans le tableau
     //pour les pdf
     connect(ui->calculerButton, &QPushButton::clicked, this, &MainWindow::on_calculerDurabilite_clicked);
+    fournisseur f;
+    ui->tableView->setModel(f.afficher());
 
+    connect(ui->rechercher_idrf, &QPushButton::clicked, this, &MainWindow::on_rechercher_idrf_clicked);
+    connect(arduino.getserial(), &QSerialPort::readyRead, this, &MainWindow::readSerialData);
+    connect(ui->rechercher_idrf, &QPushButton::clicked, this, &MainWindow::on_rechercher_idrf_clicked);
 
-
+    // Connexion Arduino
+    int result = arduino.connect_arduino();
+    if (result == 0) {
+        // Si la connexion est réussie, vous pouvez envoyer des données
+        qDebug() << "Arduino connecté avec succès.";
+    } else {
+        qDebug() << "Impossible de connecter à Arduino. Code d'erreur: " << result;
+    }
 
 
 }
@@ -108,15 +133,27 @@ void MainWindow::on_pushButton_supprimer_clicked()
     }
 }
 
-void MainWindow::on_pushButton_10_clicked()
-{
+void MainWindow::on_pushButton_10_clicked() {
     int id = ui->lineEdit_recherche->text().toInt();
-    fournisseur etmp;
+    fournisseur etmp, result;
 
-    if (etmp.chercherParID(id)) {
-        QMessageBox::information(this, "Search Result", "fournisseur with ID " + QString::number(id) + " exists.");
+    if (etmp.chercherParID(id, result)) {
+        QMessageBox::information(this, "Search Result", "Fournisseur with ID " + QString::number(id) + " exists.");
+
+        // Mettre à jour le tableau pour n'afficher que le fournisseur trouvé
+        QSqlQueryModel *model = new QSqlQueryModel();
+        QSqlQuery query;
+        query.prepare("SELECT * FROM FOURNISSEURS WHERE ID = :id");
+        query.bindValue(":id", id);
+        query.exec();
+        model->setQuery(std::move(query));
+
+        ui->tableView->setModel(model);  // Affichage dans le tableau
     } else {
-        QMessageBox::information(this, "Search Result", "fournisseur with ID " + QString::number(id) + " does not exist.");
+        QMessageBox::information(this, "Search Result", "Fournisseur with ID " + QString::number(id) + " does not exist.");
+
+        // Optionnel : Vider ou réinitialiser le tableau en cas de non-trouvaille
+        ui->tableView->setModel(nullptr);
     }
 }
 
@@ -174,29 +211,6 @@ float MainWindow::calculerDurabilite(float materiauxRecycles, float empreinteCar
     float durabilite = (materiauxRecycles * 0.5) - (empreinteCarbone * 0.5);
     return durabilite;
 }
-void MainWindow::on_calculerDurabilite_clicked() {
-    bool ok;
-
-    int fournisseurId = ui->fournisseurIdLineEdit->text().toInt(&ok);  // Assume 'fournisseurIdLineEdit' est un champ de texte dans l'UI
-
-    bool fournisseurExist = Etmp.chargerFournisseurParId(fournisseurId);
-    if (!ok) {
-        // Si l'ID n'est pas valide, afficher un message d'erreur
-        ui->resultLabel->setText("ID invalide");
-        return;
-    }
-
-    if (fournisseurExist) {
-        // Appel à la méthode calculerDurabilite sur l'objet fournisseur
-        float durabilite = Etmp.calculerDurabilite();
-
-        // Affichage du résultat dans le QLabel
-        ui->resultLabel->setText(QString("Durabilité: %1").arg(durabilite));
-    } else {
-        // Si le fournisseur n'est pas trouvé
-        ui->resultLabel->setText("Fournisseur introuvable");
-    }
-}
 // Méthode pour charger un fournisseur par son ID
 bool MainWindow::chargerFournisseurParId(int id) {
     // Recherche basique de l'ID du fournisseur
@@ -211,6 +225,27 @@ bool MainWindow::chargerFournisseurParId(int id) {
     // Si aucun fournisseur n'est trouvé
     return false;
 }
+void MainWindow::on_calculerDurabilite_clicked() {
+    bool ok;
+    int fournisseurId = ui->fournisseurIdLineEdit->text().toInt(&ok);
+
+    if (!ok) {
+        ui->resultLabel->setText("ID invalide");
+        return;
+    }
+
+    if (Etmp.chargerFournisseurParId(fournisseurId)) {
+        if (Etmp.estDurable()) {
+            ui->resultLabel->setText("Fournisseur durable avec un score de " + QString::number(Etmp.calculerDurabilite(), 'f', 2) + "%");
+        } else {
+            ui->resultLabel->setText("Fournisseur non durable. Score : " + QString::number(Etmp.calculerDurabilite(), 'f', 2) + "%");
+        }
+    } else {
+        ui->resultLabel->setText("Fournisseur introuvable");
+    }
+}
+
+
 void MainWindow::on_pushButton_stats_clicked(){
     // Créez une instance de fournisseur (ou utilisez une instance existante)
     fournisseur fournisseurInstance;
@@ -287,5 +322,143 @@ void MainWindow::on_pushButton_stats_clicked(){
 
 
 
+void MainWindow::on_rechercher_idrf_clicked()
+{
+    // Récupérer l'ID RFID depuis le QLineEdit
+    QString rfidID = ui->lineEdit_idrf->text().trimmed();
 
+    // Requête SQL pour rechercher le fournisseur par RFID
+    QSqlQuery query;
+    query.prepare("SELECT ID, NOM FROM NAWRES.FOURNISSEURS WHERE RFID_ID = :rfid");
+    query.bindValue(":rfid", rfidID);
 
+    if (!query.exec()) {
+        qDebug() << "Erreur lors de l'exécution de la requête:" << query.lastError().text();
+        QMessageBox::critical(this, "Erreur", "Impossible d'exécuter la requête !");
+        return;
+    }
+
+    static bool dataSent = false; // Variable statique pour vérifier si les données ont déjà été envoyées
+
+    if (query.next() && !dataSent) { // Vérifier que les données ne sont pas envoyées deux fois
+        // Récupérer les données
+        int idFournisseur = query.value("ID").toInt();
+        QString nomFournisseur = query.value("NOM").toString();
+
+        // Mettre à jour le QLineEdit et QLabel avec les valeurs récupérées
+        ui->lineEdit_FournisseurNom->setText(nomFournisseur);  // Afficher le nom dans le QLineEdit
+        ui->label_id->setText(QString::number(idFournisseur));  // Afficher l'ID dans le QLabel
+
+        // Construire la chaîne de données à envoyer à l'Arduino
+        QString dataToSend = QString("ID:%1;Nom:%2")
+                                 .arg(idFournisseur)
+                                 .arg(nomFournisseur);
+        arduino.write_to_arduino(dataToSend.toUtf8());
+        // Envoyer les données à l'Arduino
+        qDebug() << "Données envoyées à Arduino :" << dataToSend;
+
+        dataSent = true; // Marquer comme envoyé
+        QTimer::singleShot(1000, [&]() { dataSent = false; }); // Réinitialiser après 1 seconde
+
+        // Ajouter un délai de 3 secondes avant de revenir à l'état initial
+        QTimer::singleShot(5000, [&]() {
+            ui->lineEdit_FournisseurNom->clear();  // Effacer le nom du fournisseur
+            ui->label_id->clear();  // Effacer l'ID du fournisseur
+            ui->lineEdit_idrf->clear();  // Effacer le champ RFID
+
+            // Réinitialiser l'affichage avec un message d'attente
+            ui->lineEdit_FournisseurNom->setText("Attente info...");
+            ui->label_id->setText("ID...");
+        });
+
+    } else if (!dataSent) {
+        qDebug() << "Fournisseur non trouvé pour l'ID RFID:" << rfidID;
+        QMessageBox::information(this, "Fournisseur introuvable", "Aucun fournisseur trouvé avec cet ID RFID.");
+
+        // Envoyer un message d'erreur à l'Arduino
+        QString errorMessage = "Erreur:Fournisseur non trouve";
+        arduino.write_to_arduino(errorMessage.toUtf8());
+        qDebug() << "Message d'erreur envoyé à Arduino :" << errorMessage;
+    }
+}
+void MainWindow::readSerialData() {
+    if (arduino.getserial()->isReadable()) {
+        QByteArray receivedData = arduino.read_from_arduino();  // Lire les données brutes
+
+        qDebug() << "Données reçues (brutes) :" << receivedData;  // Afficher les données brutes reçues
+
+        // Accumuler l'ID RFID en évitant les caractères de retour à la ligne (\r, \n)
+        rfidID += QString(receivedData).replace("\r", "").replace("\n", "");  // Supprimer les retours chariot et sauts de ligne
+
+        qDebug() << "ID RFID accumulé :" << rfidID;  // Afficher l'ID accumulé dans les logs
+
+        // Vérifier si l'ID complet est reçu (longueur 6 ou 8 caractères)
+        if (rfidID.length() == 6 || rfidID.length() == 8) {
+            // Vérifier si l'ID RFID est valide (format hexadécimal)
+            bool isValid = true;
+            for (int i = 0; i < rfidID.length(); ++i) {
+                QChar c = rfidID[i];
+                if (!((c >= '0' && c <= '9') || (c >= 'A' && c <= 'F') || (c >= 'a' && c <= 'f'))) {
+                    isValid = false;
+                    break;
+                }
+            }
+
+            if (isValid) {
+                // Recherche du fournisseur en fonction de l'ID RFID
+                QSqlQuery query;
+                query.prepare("SELECT NOM FROM FOURNISSEURS WHERE RFID_ID = :rfid_id");
+                query.bindValue(":rfid_id", rfidID);
+
+                if (query.exec()) {
+                    if (query.next()) {
+                        QString nom = query.value(0).toString();  // Récupérer le nom du fournisseur
+                        qDebug() << "Nom du fournisseur trouvé :" << nom;
+
+                        // Mettre à jour le QLabel avec le nom du fournisseur
+                        ui->label_nom->setText(nom);  // Afficher le nom dans le QLabel
+
+                        // Mettre à jour le QLineEdit avec l'ID RFID
+                        ui->lineEdit_FournisseurID->setText(rfidID);  // Afficher l'ID RFID dans le QLineEdit
+
+                        // Envoyer le nom du fournisseur à l'écran LCD
+                        sendNameToLCD(nom);
+                    } else {
+                        qDebug() << "Aucun fournisseur trouvé pour le RFID_ID :" << rfidID;
+
+                        // Si aucun fournisseur n'est trouvé, afficher un message d'erreur
+                        ui->label_nom->setText("Fournisseur non trouvé");
+                        ui->lineEdit_FournisseurID->setText(rfidID);
+                    }
+                } else {
+                    qDebug() << "Erreur SQL :" << query.lastError().text();
+                }
+            } else {
+                qDebug() << "ID RFID invalide :" << rfidID;
+            }
+
+            // Réinitialiser l'ID RFID après la recherche
+            rfidID.clear();
+        } else if (rfidID.length() > 8) {
+            // Réinitialiser si l'accumulation dépasse 8 caractères
+            qDebug() << "ID RFID trop long, réinitialisation :" << rfidID;
+            rfidID.clear();
+        }
+    } else {
+        qDebug() << "Le port série n'est pas lisible.";
+    }
+}
+
+// Fonction pour envoyer le nom à l'écran LCD via la communication série
+void MainWindow::sendNameToLCD(const QString &nom) {
+    // Assurez-vous que l'écran LCD est correctement initialisé
+    // Envoyer le nom du fournisseur à l'écran LCD (via Arduino ou autre méthode série)
+    qDebug() << "Envoi du nom du fournisseur à l'écran LCD : " << nom;
+
+    // Si vous utilisez Arduino pour contrôler l'écran LCD, vous pouvez envoyer une commande série
+    // Exemple pour Arduino : envoyer le nom à l'écran LCD via communication série
+    arduino.write(nom.toUtf8());  // Convertir le nom en UTF-8 et l'envoyer à Arduino
+
+    // Vous pouvez envoyer un caractère spécial pour indiquer la fin de l'affichage (optionnel)
+    arduino.write("\n");  // Exemple : envoyer un saut de ligne pour marquer la fin de l'affichage
+}

@@ -21,6 +21,7 @@ public:
     QString getAdresse() const;
     float getMateriauxRecycles() const;
     float getEmpreinteCarbone() const;
+    bool estDurable() const;  // Ajoutez cette ligne
 
     void setID(int id);
     void setNom(const QString &nom);
@@ -36,11 +37,12 @@ public:
     QSqlQueryModel * afficher();
     bool supprimer(int id);
     bool exporterPDF(const QString &nomFichier, QAbstractItemModel *model);
-    bool chercherParID(int id);
+    bool chercherParID(int id,fournisseur &result);
     QSqlQueryModel* trierParID(bool asc);
     bool chargerFournisseurParId(int id);  // Récupère les données du fournisseur par son ID
     float calculerDurabilite() const;
     QMap<QString, int> statistiquesFournisseur();
+
 
 
 

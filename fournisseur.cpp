@@ -41,7 +41,9 @@ void fournisseur::setEmpreinteCarbone(float empreinteCarbone) {
 bool fournisseur::ajouter() {
     QSqlQuery query;
 
-    query.prepare("INSERT INTO FOURNISSEURS (ID,NOM,TELEPHONE,PRODUIT_FOURNIS,DATE_COLLABORATION,ADRESSE,MATERIAUX_RECYCLES, EMPREINTE_CARBONE) VALUES (:ID,:NOM,:TELEPHONE,:PRODUIT_FOURNIS,:DATE_COLLABORATION,:ADRESSE,:MATERIAUX_RECYCLES, :EMPREINTE_CARBONE)");
+    query.prepare("INSERT INTO FOURNISSEURS (ID, NOM, TELEPHONE, PRODUIT_FOURNIS, DATE_COLLABORATION, ADRESSE, MATERIAUX_RECYCLES, EMPREINTE_CARBONE) "
+                  "VALUES (:ID, :NOM, :TELEPHONE, :PRODUIT_FOURNIS, :DATE_COLLABORATION, :ADRESSE, :MATERIAUX_RECYCLES, :EMPREINTE_CARBONE)");
+
     query.bindValue(":ID", id);
     query.bindValue(":NOM", nom);
     query.bindValue(":TELEPHONE", telephone);
@@ -51,23 +53,29 @@ bool fournisseur::ajouter() {
     query.bindValue(":MATERIAUX_RECYCLES", materiauxRecycles);
     query.bindValue(":EMPREINTE_CARBONE", empreinteCarbone);
 
+    // Afficher la requête pour vérifier son contenu
+    qDebug() << "Executing query:" << query.executedQuery();
 
     if (!query.exec()) {
-        qDebug() << "erreur"<< query.lastError().text();
+        qDebug() << "Error executing query:" << query.lastError().text();
+        qDebug() << "Query text:" << query.lastQuery(); // Affiche la requête qui a échoué
         return false;
     }
-    qDebug() << "fournisseur added succefully" << query.lastError().text();
+
+    qDebug() << "Fournisseur added successfully!";
     return true;
-
-
-
 }
 
-QSqlQueryModel * fournisseur::afficher()
-{
-    QSqlQueryModel * model = new QSqlQueryModel();
 
-    model->setQuery("SELECT * FROM FOURNISSEURS");
+
+QSqlQueryModel* fournisseur::afficher()
+{
+    QSqlQueryModel *model = new QSqlQueryModel();
+
+    // Sélectionner toutes les colonnes y compris RFID_ID
+    model->setQuery("SELECT ID, NOM, TELEPHONE, PRODUIT_FOURNIS, DATE_COLLABORATION, ADRESSE, MATERIAUX_RECYCLES, EMPREINTE_CARBONE, RFID_ID FROM FOURNISSEURS");
+
+    // Définir les en-têtes de colonne, y compris RFID_ID
     model->setHeaderData(0, Qt::Horizontal, QObject::tr("ID"));
     model->setHeaderData(1, Qt::Horizontal, QObject::tr("NOM"));
     model->setHeaderData(2, Qt::Horizontal, QObject::tr("TELEPHONE"));
@@ -76,10 +84,10 @@ QSqlQueryModel * fournisseur::afficher()
     model->setHeaderData(5, Qt::Horizontal, QObject::tr("ADRESSE"));
     model->setHeaderData(6, Qt::Horizontal, QObject::tr("Matériaux Recyclés (%)"));
     model->setHeaderData(7, Qt::Horizontal, QObject::tr("Empreinte Carbone (kg CO2)"));
+    model->setHeaderData(8, Qt::Horizontal, QObject::tr("RFID_ID")); // Assurez-vous d'inclure RFID_ID
 
     return model;
 }
-
 
 // Method to delete a client
 bool fournisseur::supprimer(int id) {
@@ -96,24 +104,23 @@ bool fournisseur::supprimer(int id) {
 }
 
 
-bool fournisseur::chercherParID(int id) {
+bool fournisseur::chercherParID(int id, fournisseur &result) {
     QSqlQuery query;
     query.prepare("SELECT * FROM FOURNISSEURS WHERE ID = :id");
     query.bindValue(":id", id);
 
-    if (!query.exec()) {
-        qDebug() << "Erreur lors de la recherche du fournisseur par ID :" << query.lastError().text();
-        return false;
-    }
-
-    if (query.next()) {
-        // Si au moins un résultat est trouvé, le fournisseur existe
+    if (query.exec() && query.next()) {
+        result.id = query.value("ID").toInt();
+        result.nom = query.value("NOM").toString();
+        result.telephone = query.value("TELEPHONE").toString();
+        result.produitfournis = query.value("PRODUIT_FOURNIS").toString();
+        result.datecollaboration = query.value("DATE_COLLABORATION").toString();
+        result.adresse = query.value("ADRESSE").toString();
         return true;
     }
-
-    // Si aucun résultat n'est trouvé, le fournisseur n'existe pas
     return false;
 }
+
 
 
 
@@ -190,30 +197,41 @@ QSqlQueryModel* fournisseur::trierParID(bool asc) {
     model->setQuery(std::move(query));
     return model;
 }
-float fournisseur::calculerDurabilite() const {
-    return (materiauxRecycles ) - (empreinteCarbone );
-}
-bool fournisseur::chargerFournisseurParId(int id)
-{
-    // Charger les informations du fournisseur en fonction de son ID
+bool fournisseur::chargerFournisseurParId(int id) {
     QSqlQuery query;
-    query.prepare("SELECT NOM, MATERIAUX_RECYCLES, EMPREINTE_CARBONE FROM FOURNISSEURS WHERE ID = :id");
+    query.prepare("SELECT ID, NOM, MATERIAUX_RECYCLES, EMPREINTE_CARBONE FROM FOURNISSEURS WHERE ID = :id");
     query.bindValue(":id", id);
 
-    if (!query.exec()) {
-        qDebug() << "Erreur de requête : " << query.lastError().text();
-        return false;
-    }
-
-    if (query.next()) {
+    if (query.exec() && query.next()) {
         this->id = query.value("ID").toInt();
         this->nom = query.value("NOM").toString();
-        this->materiauxRecycles = query.value("MATERIAUX_RECYCLES").toFloat();  // À ajouter à votre table
-        this->empreinteCarbone = query.value("EMPREINTE_CARBONE").toFloat();  // À ajouter à votre table
-        return true;
+        this->materiauxRecycles = query.value("MATERIAUX_RECYCLES").toFloat();
+        this->empreinteCarbone = query.value("EMPREINTE_CARBONE").toFloat();
+        return true;  // Fournisseur trouvé
     }
-    return false;
+
+    return false;  // Fournisseur non trouvé
 }
+
+float fournisseur::calculerDurabilite() const {
+    float maxMateriauxRecycles = 100.0;  // Suppose que 100% est le maximum possible
+    float maxEmpreinteCarbone = 50.0;    // Suppose qu'une empreinte de 50 est le maximum "acceptable"
+
+    // Normalisation des valeurs
+    float scoreMateriaux = (materiauxRecycles / maxMateriauxRecycles) * 100;  // Score en pourcentage
+    float scoreEmpreinte = ((maxEmpreinteCarbone - empreinteCarbone) / maxEmpreinteCarbone) * 100;
+
+    // Combinaison des scores avec des pondérations (50% chaque)
+    float scoreDurabilite = (scoreMateriaux * 0.5) + (scoreEmpreinte * 0.5);
+
+    return scoreDurabilite;  // Retourne un pourcentage de 0 à 100
+}
+bool fournisseur::estDurable() const {
+    float score = calculerDurabilite();
+    return score >= 70.0;  // Seuil de durabilité, modifiable selon vos critères
+}
+
+
 
 QMap<QString, int> fournisseur::statistiquesFournisseur() {
     QMap<QString, int> statistiques;
