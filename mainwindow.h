@@ -1,5 +1,6 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
+<<<<<<< HEAD
 #include "fournisseur.h"
 #include "connection.h"
 #include <QMainWindow>
@@ -39,10 +40,22 @@ namespace Ui { class MainWindow; }
 
 class MainWindow : public QMainWindow
 {
+=======
+
+#include <QMainWindow>
+#include <QPushButton>
+
+QT_BEGIN_NAMESPACE
+namespace Ui { class MainWindow; }
+QT_END_NAMESPACE
+
+class MainWindow : public QMainWindow {
+>>>>>>> 6970123e40de339b0298ce361cc13ba1279501a0
     Q_OBJECT
 
 public:
     explicit MainWindow(QWidget *parent = nullptr);
+<<<<<<< HEAD
     // void envoyerDonneesArduino(const QString &rfidID);
     ~MainWindow();
    // void sendDataToArduino();
@@ -75,6 +88,23 @@ private:
     QTimer *rfidTimer;
      QString rfidID;
 
+=======
+    ~MainWindow();
+
+private:
+    Ui::MainWindow *ui;
+    QPushButton *buttonArticle;
+    QPushButton *buttonClients;
+    QPushButton *buttonCommandes;
+    QPushButton *buttonEmployes;
+    QPushButton *buttonFournisseurs;
+    QPushButton *buttonEquipements;
+    QPushButton *buttonQuitter;
+
+public slots:
+    void openClientsWindow(); // Slot to open the Clients window
+    void closeApplication(); // Slot to handle Quitter button
+>>>>>>> 6970123e40de339b0298ce361cc13ba1279501a0
 };
 
 #endif // MAINWINDOW_H

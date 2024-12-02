@@ -6,14 +6,24 @@
    <rect>
     <x>0</x>
     <y>0</y>
+<<<<<<< HEAD
     <width>1126</width>
     <height>777</height>
+=======
+<<<<<<< HEAD
+    <width>1257</width>
+=======
+    <width>1260</width>
+>>>>>>> 6c5f7e3 (Ajout des fonctionnalités de gestion des clients)
+    <height>846</height>
+>>>>>>> 6970123e40de339b0298ce361cc13ba1279501a0
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
+<<<<<<< HEAD
    <widget class="QTabWidget" name="tabWidget">
     <property name="geometry">
      <rect>
@@ -598,6 +608,35 @@
       </property>
      </widget>
     </widget>
+=======
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>1260</width>
+      <height>800</height>
+     </rect>
+    </property>
+<<<<<<< HEAD
+=======
+    <property name="maximumSize">
+     <size>
+      <width>1260</width>
+      <height>16777215</height>
+     </size>
+    </property>
+>>>>>>> 6c5f7e3 (Ajout des fonctionnalités de gestion des clients)
+    <property name="text">
+     <string/>
+    </property>
+    <property name="pixmap">
+     <pixmap resource="image.qrc">:/image/Section 8.png</pixmap>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
+    </property>
+>>>>>>> 6970123e40de339b0298ce361cc13ba1279501a0
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -605,13 +644,27 @@
     <rect>
      <x>0</x>
      <y>0</y>
+<<<<<<< HEAD
      <width>1126</width>
+=======
+<<<<<<< HEAD
+     <width>1257</width>
+=======
+     <width>1260</width>
+>>>>>>> 6c5f7e3 (Ajout des fonctionnalités de gestion des clients)
+>>>>>>> 6970123e40de339b0298ce361cc13ba1279501a0
      <height>26</height>
     </rect>
    </property>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
+<<<<<<< HEAD
  <resources/>
+=======
+ <resources>
+  <include location="image.qrc"/>
+ </resources>
+>>>>>>> 6970123e40de339b0298ce361cc13ba1279501a0
  <connections/>
 </ui>

@@ -11,6 +11,7 @@
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
+<<<<<<< HEAD
 #include <QtWidgets/QGroupBox>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
@@ -22,6 +23,12 @@
 #include <QtWidgets/QTabWidget>
 #include <QtWidgets/QTableView>
 #include <QtWidgets/QVBoxLayout>
+=======
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QMainWindow>
+#include <QtWidgets/QMenuBar>
+#include <QtWidgets/QStatusBar>
+>>>>>>> 6970123e40de339b0298ce361cc13ba1279501a0
 #include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -30,6 +37,7 @@ class Ui_MainWindow
 {
 public:
     QWidget *centralwidget;
+<<<<<<< HEAD
     QTabWidget *tabWidget;
     QWidget *tab;
     QLabel *label_2;
@@ -77,6 +85,9 @@ public:
     QLineEdit *fournisseurIdLineEdit;
     QLabel *label_10;
     QLabel *label_11;
+=======
+    QLabel *label;
+>>>>>>> 6970123e40de339b0298ce361cc13ba1279501a0
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -84,6 +95,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName("MainWindow");
+<<<<<<< HEAD
         MainWindow->resize(1126, 777);
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName("centralwidget");
@@ -240,6 +252,20 @@ public:
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName("menubar");
         menubar->setGeometry(QRect(0, 0, 1126, 26));
+=======
+        MainWindow->resize(1257, 846);
+        centralwidget = new QWidget(MainWindow);
+        centralwidget->setObjectName("centralwidget");
+        label = new QLabel(centralwidget);
+        label->setObjectName("label");
+        label->setGeometry(QRect(0, 0, 1260, 800));
+        label->setPixmap(QPixmap(QString::fromUtf8(":/image/Section 8.png")));
+        label->setScaledContents(true);
+        MainWindow->setCentralWidget(centralwidget);
+        menubar = new QMenuBar(MainWindow);
+        menubar->setObjectName("menubar");
+        menubar->setGeometry(QRect(0, 0, 1257, 26));
+>>>>>>> 6970123e40de339b0298ce361cc13ba1279501a0
         MainWindow->setMenuBar(menubar);
         statusbar = new QStatusBar(MainWindow);
         statusbar->setObjectName("statusbar");
@@ -247,15 +273,19 @@ public:
 
         retranslateUi(MainWindow);
 
+<<<<<<< HEAD
         tabWidget->setCurrentIndex(2);
 
 
+=======
+>>>>>>> 6970123e40de339b0298ce361cc13ba1279501a0
         QMetaObject::connectSlotsByName(MainWindow);
     } // setupUi
 
     void retranslateUi(QMainWindow *MainWindow)
     {
         MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "MainWindow", nullptr));
+<<<<<<< HEAD
         label_2->setText(QCoreApplication::translate("MainWindow", "Id", nullptr));
         label_3->setText(QCoreApplication::translate("MainWindow", "nom", nullptr));
         label_4->setText(QCoreApplication::translate("MainWindow", "telephone", nullptr));
@@ -287,6 +317,9 @@ public:
         label_10->setText(QCoreApplication::translate("MainWindow", "id", nullptr));
         label_11->setText(QCoreApplication::translate("MainWindow", "resultat", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab_5), QCoreApplication::translate("MainWindow", "durabilite", nullptr));
+=======
+        label->setText(QString());
+>>>>>>> 6970123e40de339b0298ce361cc13ba1279501a0
     } // retranslateUi
 
 };

@@ -1,0 +1,36 @@
+<RCC>
+    <qresource prefix="/image">
+        <file>222.png</file>
+<<<<<<< HEAD
+        <file>1723873.png</file>
+        <file>ff.png</file>
+        <file>ima.png</file>
+        <file>image.png</file>
+=======
+        <file>8.png</file>
+        <file>11.png</file>
+        <file>22.png</file>
+        <file>1723873.png</file>
+        <file>ff.png</file>
+        <file>im.png</file>
+        <file>ima.png</file>
+        <file>image.png</file>
+        <file>importe.png</file>
+        <file>lay.png</file>
+        <file>R.png</file>
+        <file>ri.png</file>
+>>>>>>> 6c5f7e3 (Ajout des fonctionnalités de gestion des clients)
+        <file>rr33.png</file>
+        <file>rrr1.png</file>
+        <file>Section 8.png</file>
+        <file>Section 9.png</file>
+        <file>tt1.png</file>
+<<<<<<< HEAD
+        <file>test.wav</file>
+=======
+        <file>u.png</file>
+        <file>pdf.png</file>
+        <file>r1.png</file>
+>>>>>>> 6c5f7e3 (Ajout des fonctionnalités de gestion des clients)
+    </qresource>
+</RCC>
