@@ -1,8 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "equipment.h"
-#include <QPrinter>
-#include <QPainter>
 #include <QFileDialog>
 
 MainWindow::MainWindow(QWidget *parent)

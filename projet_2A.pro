@@ -9,15 +9,19 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    arduino.cpp \
     equipment.cpp \
     main.cpp \
     mainwindow.cpp \
-    connection.cpp
+    connection.cpp \
+    produit.cpp
 
 HEADERS += \
+    arduino.h \
     equipment.h \
     mainwindow.h \
-    connection.h
+    connection.h \
+    produit.h
 
 FORMS += \
     mainwindow.ui
@@ -34,3 +38,6 @@ RESOURCES += \
     resources.qrc
 
 QT += core gui printsupport
+
+QT += serialport
+
