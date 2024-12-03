@@ -11,14 +11,14 @@ employe::employe(const QString& nom, const QString& prenom, const QString& mail,
 }
 
 employe::employe() {}
-
+// afficher employe
 QSqlQueryModel* employe::afficherEmploye() {
     QSqlQueryModel *model = new QSqlQueryModel();
     model->setQuery("SELECT * FROM employe");
     if (model->lastError().isValid()) {
         qDebug() << "Erreur requête:" << model->lastError().text();
     } else {
-        qDebug() << model->rowCount() << " enregistrements trouvés";
+        qDebug() << model->rowCount() << "**** enregistrements trouvés******";
     }
 
     return model;
@@ -86,18 +86,13 @@ QSqlQueryModel* employe::rechercheparnom(const QString& recherche) {
     QSqlQueryModel* model = new QSqlQueryModel();
     QSqlQuery query;
 
-    // Prepare the query with the LIKE operator
     query.prepare("SELECT * FROM employe WHERE nom LIKE :recherche");
 
-    // Bind the search term with wildcard characters for partial matching
     query.bindValue(":recherche", "%" + recherche + "%");
 
-    // Execute the query
     if (query.exec()) {
-        // Set the query result to the model
-        model->setQuery(query);
+        model->setQuery("SELECT * FROM employe WHERE nom LIKE :recherche");
     } else {
-        // Log or handle the error if the query execution fails
         qDebug() << "Query execution failed: " << query.lastError().text();
     }
 

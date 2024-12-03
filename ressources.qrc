@@ -9,5 +9,9 @@
         <file>images/setting.png</file>
         <file>images/pdf.png</file>
         <file>images/sorting.png</file>
+        <file>images/loginicon.png</file>
+        <file>images/loginbackground.jpg</file>
+        <file>images/backgroundacceuil.png</file>
+        <file>images/homepageicon.png</file>
     </qresource>
 </RCC>
