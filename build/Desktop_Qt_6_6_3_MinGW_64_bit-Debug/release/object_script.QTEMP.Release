@@ -1,0 +1,12 @@
+release/arduino.o
+release/client.o
+release/commande.o
+release/connection.o
+release/employe.o
+release/imagedelegate.o
+release/main.o
+release/mainwindow.o
+release/qrc_ressources.o
+release/moc_arduino.o
+release/moc_imagedelegate.o
+release/moc_mainwindow.o
