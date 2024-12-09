@@ -1,0 +1,36 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/add-user.png</file>
+        <file>images/bg.jpeg</file>
+        <file>images/delete.png</file>
+        <file>images/edit-button.png</file>
+        <file>images/headhunting.png</file>
+        <file>images/Messenger_creation_E3DE35F4-C526-4CC4-8E18-1A43498F0645.jpeg</file>
+        <file>images/setting.png</file>
+        <file>images/pdf.png</file>
+        <file>images/sorting.png</file>
+        <file>images/loginicon.png</file>
+        <file>images/loginbackground.jpg</file>
+        <file>images/backgroundacceuil.png</file>
+        <file>images/homepageicon.png</file>
+        <file>images/8.png</file>
+        <file>images/11.png</file>
+        <file>images/222.png</file>
+        <file>images/1723873.png</file>
+        <file>images/ff.png</file>
+        <file>images/im.png</file>
+        <file>images/ima.png</file>
+        <file>images/importe.png</file>
+        <file>images/lay.png</file>
+        <file>images/pdf1.png</file>
+        <file>images/R.png</file>
+        <file>images/r1.png</file>
+        <file>images/ri.png</file>
+        <file>images/rr33.png</file>
+        <file>images/rrr1.png</file>
+        <file>images/setting (1).png</file>
+        <file>images/tt1.png</file>
+        <file>images/u.png</file>
+        <file>images/22.png</file>
+    </qresource>
+</RCC>

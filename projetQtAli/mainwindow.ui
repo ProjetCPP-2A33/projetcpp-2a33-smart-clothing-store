@@ -1,0 +1,1225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1167</width>
+    <height>743</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <property name="styleSheet">
+    <string notr="true"/>
+   </property>
+   <layout class="QGridLayout" name="gridLayout_3">
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
+    <item row="0" column="0">
+     <widget class="QStackedWidget" name="stackedWidgetprincipale">
+      <property name="styleSheet">
+       <string notr="true">background-image:none;</string>
+      </property>
+      <property name="currentIndex">
+       <number>2</number>
+      </property>
+      <widget class="QWidget" name="pageemp">
+       <property name="styleSheet">
+        <string notr="true">background-image:none;</string>
+       </property>
+       <widget class="QFrame" name="frame_3">
+        <property name="geometry">
+         <rect>
+          <x>30</x>
+          <y>110</y>
+          <width>251</width>
+          <height>421</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">#frame_3 {
+    background: transparent;
+    border: none;
+}
+QPushButton {
+    background: white;
+    border: none;
+color:black;
+}</string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::Shape::StyledPanel</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Shadow::Raised</enum>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_8">
+         <item>
+          <widget class="QPushButton" name="bouttonafficheremloyes_2">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>50</height>
+            </size>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>12</pointsize>
+             <bold>true</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>Afficher Employes</string>
+           </property>
+           <property name="icon">
+            <iconset resource="ressources.qrc">
+             <normaloff>:/images/headhunting.png</normaloff>:/images/headhunting.png</iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="bouttonafficherajoutemploye_2">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>50</height>
+            </size>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>12</pointsize>
+             <bold>true</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>Ajouter Employe</string>
+           </property>
+           <property name="icon">
+            <iconset resource="ressources.qrc">
+             <normaloff>:/images/add-user.png</normaloff>:/images/add-user.png</iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="bouttonafficherpagemodifieremploye_2">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>50</height>
+            </size>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>12</pointsize>
+             <bold>true</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>Modifier Employe</string>
+           </property>
+           <property name="icon">
+            <iconset resource="ressources.qrc">
+             <normaloff>:/images/edit-button.png</normaloff>:/images/edit-button.png</iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="bouttonafficherpagesupprimer_2">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>50</height>
+            </size>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>12</pointsize>
+             <bold>true</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>Supprimer Employe</string>
+           </property>
+           <property name="icon">
+            <iconset resource="ressources.qrc">
+             <normaloff>:/images/delete.png</normaloff>:/images/delete.png</iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButton_7">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>50</height>
+            </size>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>12</pointsize>
+             <bold>true</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>Paramétres</string>
+           </property>
+           <property name="icon">
+            <iconset resource="ressources.qrc">
+             <normaloff>:/images/setting.png</normaloff>:/images/setting.png</iconset>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QStackedWidget" name="stackedWidgetemploye">
+        <property name="geometry">
+         <rect>
+          <x>380</x>
+          <y>130</y>
+          <width>771</width>
+          <height>471</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">
+    background: rgba(68,153,156,255);
+    border: 1px solid lightgray;
+color : black;
+
+</string>
+        </property>
+        <property name="currentIndex">
+         <number>2</number>
+        </property>
+        <widget class="QWidget" name="pageafficheremployes_2">
+         <layout class="QGridLayout" name="gridLayout_4">
+          <item row="1" column="0">
+           <widget class="QTableView" name="emptable_2">
+            <property name="styleSheet">
+             <string notr="true">background-color:white;
+color:black;</string>
+            </property>
+            <attribute name="verticalHeaderVisible">
+             <bool>false</bool>
+            </attribute>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QFrame" name="frame_9">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>50</height>
+             </size>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::Shape::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Shadow::Raised</enum>
+            </property>
+            <widget class="QLineEdit" name="inputrecherche_2">
+             <property name="geometry">
+              <rect>
+               <x>50</x>
+               <y>10</y>
+               <width>281</width>
+               <height>28</height>
+              </rect>
+             </property>
+            </widget>
+            <widget class="QPushButton" name="bouttonrecherche_2">
+             <property name="geometry">
+              <rect>
+               <x>360</x>
+               <y>10</y>
+               <width>91</width>
+               <height>29</height>
+              </rect>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QPushButton::hover{
+background-color:rgb(110, 255, 134);
+}
+QPushButton::pressed{
+background-color:rgb(39, 255, 64);
+}</string>
+             </property>
+             <property name="text">
+              <string>Recherche</string>
+             </property>
+            </widget>
+            <widget class="QPushButton" name="buttontriparnom_2">
+             <property name="geometry">
+              <rect>
+               <x>470</x>
+               <y>10</y>
+               <width>121</width>
+               <height>29</height>
+              </rect>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QPushButton::hover{
+background-color:rgb(110, 255, 134);
+}
+QPushButton::pressed{
+background-color:rgb(39, 255, 64);
+}</string>
+             </property>
+             <property name="text">
+              <string>tri par Nom</string>
+             </property>
+             <property name="icon">
+              <iconset resource="ressources.qrc">
+               <normaloff>:/images/sorting.png</normaloff>:/images/sorting.png</iconset>
+             </property>
+            </widget>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="pagesupprimer_2">
+         <widget class="QPushButton" name="button_supprimer_2">
+          <property name="geometry">
+           <rect>
+            <x>250</x>
+            <y>220</y>
+            <width>161</width>
+            <height>51</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Supprimer</string>
+          </property>
+         </widget>
+         <widget class="QLineEdit" name="idsupprimer_2">
+          <property name="geometry">
+           <rect>
+            <x>330</x>
+            <y>150</y>
+            <width>201</width>
+            <height>41</height>
+           </rect>
+          </property>
+         </widget>
+         <widget class="QLabel" name="label_22">
+          <property name="geometry">
+           <rect>
+            <x>160</x>
+            <y>150</y>
+            <width>161</width>
+            <height>41</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Id Produit</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignmentFlag::AlignCenter</set>
+          </property>
+         </widget>
+        </widget>
+        <widget class="QWidget" name="page_2">
+         <widget class="QLabel" name="label_41">
+          <property name="geometry">
+           <rect>
+            <x>110</x>
+            <y>180</y>
+            <width>151</width>
+            <height>31</height>
+           </rect>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>12</pointsize>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>Données Recues :</string>
+          </property>
+         </widget>
+         <widget class="QTextEdit" name="receiveddata">
+          <property name="geometry">
+           <rect>
+            <x>110</x>
+            <y>220</y>
+            <width>171</width>
+            <height>51</height>
+           </rect>
+          </property>
+         </widget>
+        </widget>
+        <widget class="QWidget" name="pageajouteremploye_2">
+         <widget class="QPushButton" name="bouttonajouter_2">
+          <property name="geometry">
+           <rect>
+            <x>290</x>
+            <y>360</y>
+            <width>161</width>
+            <height>51</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Ajouter</string>
+          </property>
+         </widget>
+         <widget class="QFrame" name="frame_10">
+          <property name="geometry">
+           <rect>
+            <x>180</x>
+            <y>40</y>
+            <width>169</width>
+            <height>291</height>
+           </rect>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::Shape::StyledPanel</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Shadow::Raised</enum>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_9">
+           <item>
+            <widget class="QLabel" name="label_10">
+             <property name="text">
+              <string>Nom</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignmentFlag::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_12">
+             <property name="text">
+              <string>Prenom</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignmentFlag::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_13">
+             <property name="text">
+              <string>mail</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignmentFlag::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_24">
+             <property name="text">
+              <string>mot de passe</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignmentFlag::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_25">
+             <property name="text">
+              <string>genre</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignmentFlag::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_26">
+             <property name="text">
+              <string>numéro de télèphone</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignmentFlag::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_27">
+             <property name="text">
+              <string>Adresse</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignmentFlag::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QFrame" name="frame_11">
+          <property name="geometry">
+           <rect>
+            <x>380</x>
+            <y>40</y>
+            <width>221</width>
+            <height>291</height>
+           </rect>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::Shape::StyledPanel</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Shadow::Raised</enum>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_10">
+           <item>
+            <widget class="QLineEdit" name="ajouternom_2"/>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="ajouterprenom_2"/>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="ajoutermail_2"/>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="ajoutermotdepasse_2"/>
+           </item>
+           <item>
+            <widget class="QComboBox" name="combogenre_3">
+             <item>
+              <property name="text">
+               <string>male</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>female</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="ajouternumtel_2"/>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="ajouteradresse_2"/>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+        <widget class="QWidget" name="pagemodifieremloye_2">
+         <widget class="QFrame" name="frame_12">
+          <property name="geometry">
+           <rect>
+            <x>540</x>
+            <y>40</y>
+            <width>211</width>
+            <height>341</height>
+           </rect>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::Shape::StyledPanel</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Shadow::Raised</enum>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_11">
+           <item>
+            <widget class="QLineEdit" name="ajouternom_4"/>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="ajouterprenom_4"/>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="ajoutermail_4"/>
+           </item>
+           <item>
+            <widget class="QComboBox" name="combogenre_4">
+             <item>
+              <property name="text">
+               <string>male</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>female</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="ajoutermotdepasse_4"/>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="ajouternumtel_4"/>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="ajouteradresse_4"/>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QPushButton" name="bouttonconfirmermodif_2">
+          <property name="geometry">
+           <rect>
+            <x>440</x>
+            <y>390</y>
+            <width>161</width>
+            <height>51</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Modifier</string>
+          </property>
+         </widget>
+         <widget class="QFrame" name="frame_13">
+          <property name="geometry">
+           <rect>
+            <x>350</x>
+            <y>40</y>
+            <width>169</width>
+            <height>341</height>
+           </rect>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::Shape::StyledPanel</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Shadow::Raised</enum>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_12">
+           <item>
+            <widget class="QLabel" name="label_28">
+             <property name="text">
+              <string>Nom</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignmentFlag::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_29">
+             <property name="text">
+              <string>Prenom</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignmentFlag::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_30">
+             <property name="text">
+              <string>mail</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignmentFlag::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_31">
+             <property name="text">
+              <string>genre</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignmentFlag::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_32">
+             <property name="text">
+              <string>mot de passe</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignmentFlag::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_33">
+             <property name="text">
+              <string>numéro de télèphone</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignmentFlag::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_34">
+             <property name="text">
+              <string>Adresse</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignmentFlag::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QLineEdit" name="idemployemodif_2">
+          <property name="geometry">
+           <rect>
+            <x>120</x>
+            <y>40</y>
+            <width>91</width>
+            <height>31</height>
+           </rect>
+          </property>
+         </widget>
+         <widget class="QPushButton" name="bouttonconfirmeidmodif">
+          <property name="geometry">
+           <rect>
+            <x>220</x>
+            <y>40</y>
+            <width>101</width>
+            <height>31</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>confirmer</string>
+          </property>
+         </widget>
+         <widget class="QLabel" name="label_35">
+          <property name="geometry">
+           <rect>
+            <x>10</x>
+            <y>40</y>
+            <width>101</width>
+            <height>31</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Id Produit</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignmentFlag::AlignCenter</set>
+          </property>
+         </widget>
+        </widget>
+        <widget class="QWidget" name="page_4">
+         <layout class="QGridLayout" name="gridLayout_5">
+          <item row="0" column="0">
+           <widget class="QTextEdit" name="textHistorique_2"/>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="pagestatistiques_2"/>
+       </widget>
+       <widget class="QLabel" name="label_40">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>1171</width>
+          <height>751</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true"/>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="pixmap">
+         <pixmap resource="ressources.qrc">:/images/bg.jpeg</pixmap>
+        </property>
+        <property name="scaledContents">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="bouttonexportpdf">
+        <property name="geometry">
+         <rect>
+          <x>440</x>
+          <y>640</y>
+          <width>151</width>
+          <height>41</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>12</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>Export PDF</string>
+        </property>
+        <property name="icon">
+         <iconset resource="ressources.qrc">
+          <normaloff>:/images/pdf.png</normaloff>:/images/pdf.png</iconset>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="bouttonformlogin">
+        <property name="geometry">
+         <rect>
+          <x>1030</x>
+          <y>20</y>
+          <width>101</width>
+          <height>81</height>
+         </rect>
+        </property>
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
+        </property>
+        <property name="styleSheet">
+         <string notr="true"> QPushButton {
+        background-color: transparent;
+        border: 2px solid transparent;
+        padding: 10px;
+        font-size: 16px;
+    }
+    QPushButton:hover {
+        border: 2px solid rgba(0, 0, 0, 0.3); 
+    }
+    QPushButton:pressed {
+        transform: translate(5px, 5px);
+        border: 2px solid rgba(0, 0, 0, 0.1); 
+    }</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset resource="ressources.qrc">
+          <normaloff>:/images/homepageicon.png</normaloff>:/images/homepageicon.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>70</width>
+          <height>70</height>
+         </size>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pushButton">
+        <property name="geometry">
+         <rect>
+          <x>780</x>
+          <y>640</y>
+          <width>131</width>
+          <height>41</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>12</pointsize>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>Statistiques</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pushButton_2">
+        <property name="geometry">
+         <rect>
+          <x>610</x>
+          <y>640</y>
+          <width>151</width>
+          <height>41</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>12</pointsize>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>Historique</string>
+        </property>
+       </widget>
+       <zorder>label_40</zorder>
+       <zorder>frame_3</zorder>
+       <zorder>stackedWidgetemploye</zorder>
+       <zorder>bouttonexportpdf</zorder>
+       <zorder>bouttonformlogin</zorder>
+       <zorder>pushButton</zorder>
+       <zorder>pushButton_2</zorder>
+      </widget>
+      <widget class="QWidget" name="pageconnection">
+       <property name="styleSheet">
+        <string notr="true">
+background-image:none;</string>
+       </property>
+       <widget class="QPushButton" name="bouttonconnection">
+        <property name="geometry">
+         <rect>
+          <x>490</x>
+          <y>450</y>
+          <width>141</width>
+          <height>45</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true"> QPushButton {
+        padding: 10px;
+        font-size: 16px;
+        border: 2px solid rgb(130, 234, 255); 
+        transition: background-color 0.2s ease, color 0.2s ease;
+		border-radius:25px;rgb(176, 176, 176)
+    }
+    QPushButton:hover {
+        background-color: lightblue;
+        border: 2px solid rgba(0, 0, 0, 0.2);
+    }
+    QPushButton:pressed {
+        background-color: #add8e6;
+        border: 2px solid rgba(0, 0, 0, 0.3); 
+    }</string>
+        </property>
+        <property name="text">
+         <string>Se Connecter</string>
+        </property>
+       </widget>
+       <widget class="QFrame" name="frame_15">
+        <property name="geometry">
+         <rect>
+          <x>564</x>
+          <y>300</y>
+          <width>231</width>
+          <height>119</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background:lightgrayrgb(244, 253, 255);
+border:none;</string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::Shape::StyledPanel</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Shadow::Raised</enum>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_14">
+         <item>
+          <widget class="QLineEdit" name="inputloginform_2">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>45</height>
+            </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">padding:10px;
+</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="inputloginmotdepasse_2">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>45</height>
+            </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">padding:10px;</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QFrame" name="frame_14">
+        <property name="geometry">
+         <rect>
+          <x>330</x>
+          <y>300</y>
+          <width>231</width>
+          <height>121</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background:lightgrayrgb(244, 253, 255);
+border:none;</string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::Shape::StyledPanel</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Shadow::Raised</enum>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_13">
+         <item>
+          <widget class="QLabel" name="label_36">
+           <property name="styleSheet">
+            <string notr="true">font: 700 12pt &quot;Segoe UI&quot;;
+background-color:whitesmoke;
+border-radius:25px;
+border: 2px solid rgb(130, 234, 255); </string>
+           </property>
+           <property name="text">
+            <string>Email / Username</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignmentFlag::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_37">
+           <property name="styleSheet">
+            <string notr="true">font: 700 12pt &quot;Segoe UI&quot;;
+background-color:whitesmoke;
+   border: 2px solid rgb(130, 234, 255); 
+border-radius:25px;</string>
+           </property>
+           <property name="text">
+            <string>Mot de passe</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignmentFlag::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QLabel" name="label_38">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>1171</width>
+          <height>751</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">
+background-image:url(/images/backgroundacceuil.png);</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="pixmap">
+         <pixmap resource="ressources.qrc">:/images/bg.jpeg</pixmap>
+        </property>
+        <property name="scaledContents">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <zorder>label_38</zorder>
+       <zorder>frame_15</zorder>
+       <zorder>frame_14</zorder>
+       <zorder>bouttonconnection</zorder>
+      </widget>
+      <widget class="QWidget" name="pagehomepage">
+       <property name="styleSheet">
+        <string notr="true"/>
+       </property>
+       <widget class="QFrame" name="frame_16">
+        <property name="geometry">
+         <rect>
+          <x>799</x>
+          <y>190</y>
+          <width>291</width>
+          <height>431</height>
+         </rect>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::Shape::StyledPanel</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Shadow::Raised</enum>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_15">
+         <item>
+          <widget class="QPushButton" name="bouttonaffichergestionemp">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>40</height>
+            </size>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>12</pointsize>
+             <bold>true</bold>
+            </font>
+           </property>
+           <property name="styleSheet">
+            <string notr="true"> QPushButton {
+        padding: 10px;
+        font-size: 16px;
+        border: 2px solid rgb(130, 234, 255); 
+        transition: background-color 0.2s ease, color 0.2s ease;
+		border-radius:25px;rgb(176, 176, 176)
+    }
+    QPushButton:hover {
+        background-color: lightblue;
+        border: 2px solid rgba(0, 0, 0, 0.2);
+    }
+    QPushButton:pressed {
+background-color:rgba(3,75,88,255);
+        border: 2px solid rgba(0, 0, 0, 0.3); 
+    }</string>
+           </property>
+           <property name="text">
+            <string>Employe</string>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>20</width>
+             <height>20</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButton_4">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>40</height>
+            </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true"> QPushButton {
+        padding: 10px;
+        font-size: 16px;
+        border: 2px solid rgb(130, 234, 255); 
+        transition: background-color 0.2s ease, color 0.2s ease;
+		border-radius:25px;rgb(176, 176, 176)
+    }
+    QPushButton:hover {
+        background-color: lightblue;
+        border: 2px solid rgba(0, 0, 0, 0.2);
+    }
+    QPushButton:pressed {
+background-color:rgba(3,75,88,255);
+        border: 2px solid rgba(0, 0, 0, 0.3); 
+    }</string>
+           </property>
+           <property name="text">
+            <string>Equipement</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButton_5">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>40</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>AAA</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButton_8">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>40</height>
+            </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true"> QPushButton {
+        padding: 10px;
+        font-size: 16px;
+        border: 2px solid rgb(130, 234, 255); 
+        transition: background-color 0.2s ease, color 0.2s ease;
+		border-radius:25px;rgb(176, 176, 176)
+    }
+    QPushButton:hover {
+        background-color: lightblue;
+        border: 2px solid rgba(0, 0, 0, 0.2);
+    }
+    QPushButton:pressed {
+background-color:rgba(3,75,88,255);
+        border: 2px solid rgba(0, 0, 0, 0.3); 
+    }</string>
+           </property>
+           <property name="text">
+            <string>BBB</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButton_9">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>40</height>
+            </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true"> QPushButton {
+        padding: 10px;
+        font-size: 16px;
+        border: 2px solid rgb(130, 234, 255); 
+        transition: background-color 0.2s ease, color 0.2s ease;
+		border-radius:25px;rgb(176, 176, 176)
+    }
+    QPushButton:hover {
+        background-color: lightblue;
+        border: 2px solid rgba(0, 0, 0, 0.2);
+    }
+    QPushButton:pressed {
+background-color:rgba(3,75,88,255);
+        border: 2px solid rgba(0, 0, 0, 0.3); 
+    }</string>
+           </property>
+           <property name="text">
+            <string>CCC</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QLabel" name="label_39">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>1171</width>
+          <height>751</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="pixmap">
+         <pixmap resource="ressources.qrc">:/images/backgroundacceuil.png</pixmap>
+        </property>
+        <property name="scaledContents">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <zorder>label_39</zorder>
+       <zorder>frame_16</zorder>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources>
+  <include location="ressources.qrc"/>
+ </resources>
+ <connections/>
+</ui>
