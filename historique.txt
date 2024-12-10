@@ -1,0 +1,6 @@
+Date: lun. nov. 25 15:12:16 2024, Type: Ajout, Details: Un produit est ajoute: hhhhhh
+Date: lun. nov. 25 15:12:48 2024, Type: Modification, Details: Un produit a été modifie: jjjjjjjjjjj
+Date: lun. nov. 25 15:13:15 2024, Type: Suppression, Details: Supprimer produit avec le nom : jjjjjjjjjjj
+Date: lun. nov. 25 15:21:05 2024, Type: Ajout, Details: Un produit est ajoute: ff
+Date: mar. nov. 26 11:15:24 2024, Type: Ajout, Details: Un produit est ajoute: ff
+Date: mar. nov. 26 11:15:41 2024, Type: Ajout, Details: Un produit est ajoute: ff
